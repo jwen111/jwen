@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Retro Glass Phone - Low Saturation Pink</title>
+    <!-- 字体与 FontAwesome 图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =========================================
+           🌸 日杂风低饱和粉色 (Dusty Rose) & 玻璃质感 全局变量
+           ========================================= */
+        :root {
+            /* 背景与机身：日杂纸质感暖米白 / 暖杏色 */
+            --bg-color: #F3EFEA;
+            --phone-bg: linear-gradient(160deg, #FAF6F0 0%, #EFE8E2 100%);
+            
+            /* 主色调：低饱和灰粉 / 莫兰迪干玫瑰色 / 暖咖啡灰 */
+            --primary-pink: #C88A85;
+            --primary-pink-light: #E3B2AE;
+            --accent-warm: #D07A74;
+            --text-dark: #3D3231;
+            --text-muted: #8C7B79;
+            
+            /* 💡 玻璃质感（Glassmorphism）高光与磨砂变量 */
+            --glass-bg: rgba(255, 248, 246, 0.55);
+            --glass-bg-hover: rgba(255, 248, 246, 0.75);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.75);
+            --glass-shadow: 0 8px 32px 0 rgba(200, 138, 133, 0.12);
+            --glass-blur: blur(16px);
+            
+            --system-bar-height: 38px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* 细密波点壁纸 */
+            background-image: radial-gradient(rgba(200, 138, 133, 0.12) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            max-height: 880px;
+            background: var(--phone-bg);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(61, 50, 49, 0.15), inset 0 0 2px rgba(255,255,255,0.9);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 480px) {
+            .phone-frame {
+                border-radius: 0;
+                max-height: 100%;
+                border: none;
+            }
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            height: var(--system-bar-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 22px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            background: rgba(250, 246, 240, 0.65);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            border-bottom: var(--glass-border);
+        }
+
+        /* 主屏幕 */
+        .screen-content {
+            flex: 1;
+            margin-top: var(--system-bar-height);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            padding-bottom: 110px;
+        }
+
+        /* 小组件区域 */
+        .widget-container {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .weather-widget {
+            background: linear-gradient(135deg, rgba(200, 138, 133, 0.85) 0%, rgba(227, 178, 174, 0.8) 100%);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 24px;
+            padding: 22px;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .weather-left .temp {
+            font-size: 46px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .weather-left .condition {
+            font-size: 13px;
+            opacity: 0.95;
+            margin-top: 6px;
+        }
+
+        .weather-left .location {
+            font-size: 11px;
+            font-weight: 400;
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+
+        .weather-right {
+            font-size: 48px;
+            opacity: 0.95;
+        }
+
+        .greeting-widget {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 20px;
+            padding: 16px 20px;
+            color: var(--text-dark);
+            font-size: 13px;
+            box-shadow: var(--glass-shadow);
+            border: var(--glass-border);
+            line-height: 1.6;
+        }
+
+        /* App 网格 */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px 15px;
+        }
+
+        .app-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .app-icon:active {
+            transform: scale(0.9);
+        }
+
+        .icon-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            box-shadow: 0 8px 20px rgba(61, 50, 49, 0.06);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        
+        .icon-line { background: linear-gradient(135deg, #06C755, #05b04a); color: white; }
+        .icon-x { background: linear-gradient(135deg, #3D3231, #251E1E); color: white; }
+        .icon-insta { 
+            background: linear-gradient(45deg, #E2B1B0 0%, #C88A85 50%, #B06963 100%);
+            color: white;
+        }
+        .icon-settings { 
+            background: var(--glass-bg); 
+            backdrop-filter: var(--glass-blur);
+            color: var(--primary-pink); 
+            border: var(--glass-border);
+        }
+
+        .app-name {
+            font-size: 11px;
+            color: var(--text-dark);
+            margin-top: 7px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        /* 💡 底部悬浮玻璃 Dock 栏 */
+        .dock {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 32px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: var(--glass-shadow);
+            border: var(--glass-border);
+        }
+
+        .dock .app-icon { margin-bottom: 0; }
+        .dock .icon-img { width: 52px; height: 52px; box-shadow: none; }
+        .dock .app-name { display: none; }
+
+        /* 应用独立页面 */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #FAF6F0;
+            display: none;
+            flex-direction: column;
+            z-index: 200;
+        }
+
+        .page.active { display: flex; }
+
+        /* 通用玻璃 Header */
+        .app-header {
+            height: 50px;
+            margin-top: var(--system-bar-height);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: var(--glass-border);
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--primary-pink);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-right: 40px;
+        }
+
+        .app-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* 设置界面样式（保留完整 API 与 语言设置） */
+        .settings-section-title {
+            font-size: 14px;
+            color: var(--primary-pink);
+            margin: 15px 0 10px 0;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group { margin-bottom: 14px; }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: var(--glass-border);
+            border-radius: 12px;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.75);
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.3s;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary-pink);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .save-btn {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 8px 20px rgba(200, 138, 133, 0.3);
+            transition: opacity 0.2s;
+        }
+
+        .save-btn:active { opacity: 0.85; }
+
+        /* LINE App 玻璃风格 */
+        .line-app { background-color: #FAF6F0; }
+
+        .line-top-bar {
+            height: 50px;
+            margin-top: var(--system-bar-height);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: var(--glass-border);
+            cursor: pointer;
+        }
+
+        .line-logo {
+            font-size: 20px;
+            font-weight: 900;
+            color: #06C755;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .line-logo span { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+
+        .line-top-icons { display: flex; gap: 15px; font-size: 17px; color: var(--text-dark); }
+
+        .line-content-panel {
+            flex: 1;
+            overflow-y: auto;
+            display: none;
+        }
+        .line-content-panel.active { display: flex; flex-direction: column; }
+
+        .line-search-bar { padding: 10px 15px; }
+        .search-wrapper { position: relative; }
+        .search-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .line-search-input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: var(--glass-border);
+            border-radius: 12px;
+            font-size: 13px;
+            outline: none;
+            color: var(--text-dark);
+        }
+
+        .line-chat-list { flex: 1; }
+
+        .line-chat-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            gap: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+        }
+        .line-chat-item:active { background-color: rgba(200, 138, 133, 0.05); }
+
+        .line-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background-color: #EEDCDA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
+
+        .line-chat-info { flex: 1; min-width: 0; }
+
+        .line-chat-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 3px;
+        }
+
+        .line-chat-preview {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .line-chat-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+
+        .line-chat-time { font-size: 10px; color: #AAA; }
+
+        .line-badge {
+            background-color: var(--primary-pink);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .line-tab-bar {
+            height: 55px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-top: var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .line-tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-muted);
+            cursor: pointer;
+            flex: 1;
+            font-size: 10px;
+        }
+
+        .line-tab-item i { font-size: 18px; }
+        .line-tab-item.active { color: var(--primary-pink); }
+
+        /* LINE 聊天室 */
+        .line-room-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #EFE8E2;
+            background-image: radial-gradient(rgba(200, 138, 133, 0.05) 1px, transparent 0);
+            background-size: 12px 12px;
+            display: none;
+            flex-direction: column;
+            z-index: 300;
+        }
+        .line-room-page.active { display: flex; }
+
+        .line-room-header {
+            height: 50px;
+            margin-top: var(--system-bar-height);
+            background: rgba(250, 246, 240, 0.85);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: var(--text-dark);
+            gap: 12px;
+            border-bottom: var(--glass-border);
+        }
+
+        .line-room-back {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .line-room-title { font-size: 15px; font-weight: 700; flex: 1; }
+
+        .line-room-actions { display: flex; gap: 18px; font-size: 16px; color: var(--text-dark); }
+
+        .line-room-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .line-msg-row { display: flex; align-items: flex-end; gap: 8px; }
+
+        .line-msg-row.self { flex-direction: row-reverse; }
+
+        .line-msg-bubble {
+            max-width: 72%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+            word-break: break-word;
+            white-space: pre-wrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .line-msg-row.other .line-msg-bubble {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            border-top-left-radius: 4px;
+            border: var(--glass-border);
+        }
+
+        .line-msg-row.self .line-msg-bubble {
+            background-color: #E3B2AE;
+            color: #3D3231;
+            border-top-right-radius: 4px;
+        }
+
+        .line-msg-time {
+            font-size: 9px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            margin-bottom: 2px;
+        }
+
+        .line-room-inputbar {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: var(--glass-border);
+        }
+
+        .line-room-inputbar i {
+            font-size: 18px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .line-room-inputbar input {
+            flex: 1;
+            padding: 8px 14px;
+            border: var(--glass-border);
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            outline: none;
+            color: var(--text-dark);
+        }
+
+        .line-send-icon { color: var(--primary-pink) !important; }
+
+        /* X (暗色复古) */
+        .x-app { background-color: #231E1E; color: #E8E8E8; }
+
+        .x-top-bar {
+            height: 50px;
+            margin-top: var(--system-bar-height);
+            background: rgba(35, 30, 30, 0.85);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .x-logo { font-size: 18px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .x-logo span { font-size: 11px; color: #888; font-weight: 400; }
+
+        .x-feed { flex: 1; overflow-y: auto; }
+
+        .x-tweet {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            gap: 12px;
+        }
+
+        .x-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: var(--primary-pink);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .x-tweet-content { flex: 1; }
+
+        .x-tweet-header { display: flex; gap: 6px; font-size: 13px; margin-bottom: 4px; }
+        .x-name { font-weight: 700; color: #FFF; }
+        .x-handle { color: #888; }
+
+        .x-text { font-size: 13px; line-height: 1.5; color: #DDD; margin-bottom: 10px; }
+
+        .x-actions { display: flex; justify-content: space-between; max-width: 80%; color: #888; font-size: 12px; }
+        .x-action-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+        /* Instagram */
+        .insta-app { background-color: #1A1616; color: #FFFFFF; }
+
+        .insta-top-bar {
+            height: 50px;
+            margin-top: var(--system-bar-height);
+            background: rgba(26, 22, 22, 0.85);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .insta-logo { font-size: 18px; font-weight: 700; font-style: italic; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .insta-logo span { font-style: normal; font-size: 11px; color: #888; font-weight: 400; }
+
+        .insta-feed { flex: 1; overflow-y: auto; }
+
+        .insta-post { background-color: #1A1616; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 15px; }
+
+        .insta-post-header { display: flex; align-items: center; padding: 10px 12px; gap: 10px; }
+
+        .insta-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #E2B1B0, #C88A85, #A05954);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .insta-username { font-size: 13px; font-weight: 600; }
+
+        .insta-image-box {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #3D3231, #231E1E);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #E2B1B0;
+        }
+
+        .insta-post-footer { padding: 10px 12px; }
+
+        .insta-icons { display: flex; justify-content: space-between; font-size: 18px; margin-bottom: 8px; }
+        .insta-icons-left { display: flex; gap: 15px; }
+
+        .insta-likes { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+
+        .insta-caption { font-size: 12px; line-height: 1.4; color: #CCC; }
+        .insta-caption span { font-weight: 600; color: #FFF; margin-right: 6px; }
+    </style>
+</head>
+<body>
+
+    <!-- 手机主框架 -->
+    <div class="phone-frame">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span id="current-time">12:00</span>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <i class="fa-solid fa-signal" style="font-size: 11px;"></i>
+                <i class="fa-solid fa-wifi" style="font-size: 11px;"></i>
+                <i class="fa-solid fa-battery-three-quarters" style="font-size: 13px;"></i>
+            </div>
+        </div>
+
+        <!-- 主屏幕 -->
+        <div class="screen-content">
+            <div class="widget-container">
+                <!-- 天气小组件 -->
+                <div class="weather-widget">
+                    <div class="weather-left">
+                        <div class="temp">22°C</div>
+                        <div class="condition" id="lang-weather">晴れときどき曇り</div>
+                        <div class="location"><i class="fa-solid fa-location-dot"></i> Tokyo, Japan</div>
+                    </div>
+                    <div class="weather-right">
+                        <i class="fa-solid fa-sun"></i>
+                    </div>
+                </div>
+
+                <!-- 日杂风小组件 -->
+                <div class="greeting-widget" id="lang-greeting">
+                    くすみピンクとガラスの質感。心地よい一日をお過ごしください。🌸
+                </div>
+            </div>
+
+            <!-- 应用图标网格 -->
+            <div class="app-grid">
+                <div class="app-icon" onclick="openApp('line')">
+                    <div class="icon-img icon-line"><i class="fa-brands fa-line"></i></div>
+                    <div class="app-name">LINE</div>
+                </div>
+                <div class="app-icon" onclick="openApp('x')">
+                    <div class="icon-img icon-x"><i class="fa-brands fa-x-twitter"></i></div>
+                    <div class="app-name">X</div>
+                </div>
+                <div class="app-icon" onclick="openApp('insta')">
+                    <div class="icon-img icon-insta"><i class="fa-regular fa-compass"></i></div>
+                    <div class="app-name">Instagram</div>
+                </div>
+                <div class="app-icon" onclick="openApp('settings')">
+                    <div class="icon-img icon-settings"><i class="fa-solid fa-gear"></i></div>
+                    <div class="app-name" id="app-name-settings">Settings</div>
+                </div>
+            </div>
+
+            <!-- 底部玻璃悬浮 Dock 栏 -->
+            <div class="dock">
+                <div class="app-icon" onclick="openApp('line')">
+                    <div class="icon-img icon-line"><i class="fa-brands fa-line"></i></div>
+                </div>
+                <div class="app-icon" onclick="openApp('x')">
+                    <div class="icon-img icon-x"><i class="fa-brands fa-x-twitter"></i></div>
+                </div>
+                <div class="app-icon" onclick="openApp('insta')">
+                    <div class="icon-img icon-insta"><i class="fa-regular fa-compass"></i></div>
+                </div>
+                <div class="app-icon" onclick="openApp('settings')">
+                    <div class="icon-img icon-settings"><i class="fa-solid fa-gear"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 设置页面（保留完整 API & 切换语言配置） -->
+        <div id="settings-page" class="page">
+            <div class="app-header">
+                <button class="header-btn" onclick="closeApp('settings')"><i class="fa-solid fa-chevron-left"></i> <span id="btn-back">ホーム</span></button>
+                <div class="header-title" id="settings-header-title">設定 / Settings</div>
+            </div>
+            <div class="app-body">
+                
+                <!-- 🌐 语言切换区域 -->
+                <div class="settings-section-title"><i class="fa-solid fa-globe"></i> 语言与界面 / Language</div>
+                <div class="form-group">
+                    <label>切换界面语言 / Interface Language</label>
+                    <select id="setting-language" onchange="changeLanguage(this.value)">
+                        <option value="ja">日本語 (Japanese)</option>
+                        <option value="zh">中文 (Chinese)</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+
+                <!-- 🔗 API 连接设置区域 -->
+                <div class="settings-section-title"><i class="fa-solid fa-plug"></i> API 连接设置 / API Settings</div>
+                <div class="form-group">
+                    <label>API Provider / 服务商</label>
+                    <select id="api-provider">
+                        <option value="openai">OpenAI (GPT-4o/GPT-3.5)</option>
+                        <option value="claude">Anthropic Claude</option>
+                        <option value="gemini">Google Gemini</option>
+                        <option value="custom">Custom / 自定义 Base URL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>API Key (密钥)</label>
+                    <input type="password" id="api-key" placeholder="sk-..." value="">
+                </div>
+                <div class="form-group">
+                    <label>API Base URL (接口基地址)</label>
+                    <input type="text" id="api-url" placeholder="https://api.openai.com/v1" value="https://api.openai.com/v1">
+                </div>
+                <div class="form-group">
+                    <label>Model Name (模型名称)</label>
+                    <input type="text" id="api-model" placeholder="gpt-4o-mini" value="gpt-4o-mini">
+                </div>
+                <div class="form-group">
+                    <label>System Prompt (系统提示词人设)</label>
+                    <textarea id="api-prompt" rows="3" placeholder="你是一个温柔的日系少女AI...">你是一个温柔且懂礼貌的日系AI助手，用治愈系口吻与用户聊天。</textarea>
+                </div>
+
+                <button class="save-btn" onclick="saveSettings()">保存配置 / Save Settings</button>
+            </div>
+        </div>
+
+        <!-- LINE 页面 -->
+        <div id="line-page" class="page line-app">
+            <div class="line-top-bar" onclick="closeApp('line')">
+                <div class="line-logo"><i class="fa-solid fa-comment"></i> LINE <span id="line-home-tip">ホームへ</span></div>
+                <div class="line-top-icons">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+            </div>
+            
+            <div class="line-content-panel active">
+                <div class="line-search-bar">
+                    <div class="search-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" class="line-search-input" placeholder="検索 / Search">
+                    </div>
+                </div>
+                <div class="line-chat-list">
+                    <div class="line-chat-item" onclick="openLineRoom('美咲 (Misaki)')">
+                        <div class="line-avatar">🌸</div>
+                        <div class="line-chat-info">
+                            <div class="line-chat-name">美咲 (Misaki)</div>
+                            <div class="line-chat-preview">今週末のカフェ、楽しみにしてるね！</div>
+                        </div>
+                        <div class="line-chat-meta">
+                            <span class="line-chat-time">14:20</span>
+                            <span class="line-badge">1</span>
+                        </div>
+                    </div>
+                    <div class="line-chat-item" onclick="openLineRoom('健太 (Kenta)')">
+                        <div class="line-avatar">☕</div>
+                        <div class="line-chat-info">
+                            <div class="line-chat-name">健太 (Kenta)</div>
+                            <div class="line-chat-preview">写真送ったよ～</div>
+                        </div>
+                        <div class="line-chat-meta">
+                            <span class="line-chat-time">昨日</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="line-tab-bar">
+                <div class="line-tab-item active"><i class="fa-regular fa-comment"></i><span>トーク</span></div>
+                <div class="line-tab-item"><i class="fa-regular fa-user"></i><span>友達</span></div>
+                <div class="line-tab-item"><i class="fa-solid fa-gear"></i><span>設定</span></div>
+            </div>
+        </div>
+
+        <!-- LINE 聊天室页面 -->
+        <div id="line-room-page" class="line-room-page">
+            <div class="line-room-header">
+                <button class="line-room-back" onclick="closeLineRoom()"><i class="fa-solid fa-chevron-left"></i></button>
+                <div id="line-room-title" class="line-room-title">Chat</div>
+                <div class="line-room-actions">
+                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+            <div id="line-room-messages" class="line-room-messages">
+                <!-- 消息列表 -->
+            </div>
+            <div class="line-room-inputbar">
+                <i class="fa-solid fa-plus"></i>
+                <i class="fa-solid fa-camera"></i>
+                <input type="text" id="line-input" placeholder="メッセージを入力...">
+                <i class="fa-solid fa-paper-plane line-send-icon" onclick="sendLineMessage()"></i>
+            </div>
+        </div>
+
+        <!-- X 页面 -->
+        <div id="x-page" class="page x-app">
+            <div class="x-top-bar" onclick="closeApp('x')">
+                <div class="x-logo"><i class="fa-brands fa-x-twitter"></i> <span>ホームへ</span></div>
+                <i class="fa-solid fa-sparkles" style="color: #888;"></i>
+            </div>
+            <div class="x-feed">
+                <div class="x-tweet">
+                    <div class="x-avatar">🌸</div>
+                    <div class="x-tweet-content">
+                        <div class="x-tweet-header">
+                            <span class="x-name">日杂風ライフスタイル</span>
+                            <span class="x-handle">@magazine_jp · 2h</span>
+                        </div>
+                        <div class="x-text">くすみピンクとベージュの組み合わせは、心を落ち着かせてくれますね。☕️ #日杂風 #暮らし</div>
+                        <div class="x-actions">
+                            <div class="x-action-item"><i class="fa-regular fa-comment"></i> 18</div>
+                            <div class="x-action-item"><i class="fa-solid fa-retweet"></i> 64</div>
+                            <div class="x-action-item"><i class="fa-regular fa-heart"></i> 410</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instagram 页面 -->
+        <div id="insta-page" class="page insta-app">
+            <div class="insta-top-bar" onclick="closeApp('insta')">
+                <div class="insta-logo">Instagram <span>ホームへ</span></div>
+                <i class="fa-regular fa-heart"></i>
+            </div>
+            <div class="insta-feed">
+                <div class="insta-post">
+                    <div class="insta-post-header">
+                        <div class="insta-avatar">🎀</div>
+                        <div class="insta-username">sakura_notes</div>
+                    </div>
+                    <div class="insta-image-box">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <div class="insta-post-footer">
+                        <div class="insta-icons">
+                            <div class="insta-icons-left">
+                                <i class="fa-regular fa-heart"></i>
+                                <i class="fa-regular fa-comment"></i>
+                                <i class="fa-regular fa-paper-plane"></i>
+                            </div>
+                            <i class="fa-regular fa-bookmark"></i>
+                        </div>
+                        <div class="insta-likes">1,580 likes</div>
+                        <div class="insta-caption"><span>sakura_notes</span> Soft pink vibes for today's afternoon tea time. 🍰</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本处理逻辑 -->
+    <script>
+        // 1. 顶部时间显示
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('current-time').innerText = `${hours}:${minutes}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 2. 页面/应用打开与关闭
+        function openApp(appId) {
+            const page = document.getElementById(`${appId}-page`);
+            if (page) page.classList.add('active');
+        }
+
+        function closeApp(appId) {
+            const page = document.getElementById(`${appId}-page`);
+            if (page) page.classList.remove('active');
+        }
+
+        // 3. 多语言切换逻辑 (Language Switch)
+        const i18n = {
+            ja: {
+                weather: "晴れときどき曇り",
+                greeting: "くすみピンクとガラスの質感。心地よい一日をお過ごしください。🌸",
+                back: "ホーム",
+                settingsTitle: "設定",
+                lineTip: "ホームへ"
+            },
+            zh: {
+                weather: "晴转多云",
+                greeting: "低饱和灰粉与透亮玻璃质感，祝你度过舒适惬意的一天。🌸",
+                back: "主页",
+                settingsTitle: "设置",
+                lineTip: "返回主页"
+            },
+            en: {
+                weather: "Partly Cloudy",
+                greeting: "Soft dusty pink with clear glass aesthetics. Have a lovely day. 🌸",
+                back: "Home",
+                settingsTitle: "Settings",
+                lineTip: "Back Home"
+            }
+        };
+
+        function changeLanguage(lang) {
+            const dict = i18n[lang] || i18n.ja;
+            document.getElementById('lang-weather').innerText = dict.weather;
+            document.getElementById('lang-greeting').innerText = dict.greeting;
+            document.getElementById('btn-back').innerText = dict.back;
+            document.getElementById('settings-header-title').innerText = dict.settingsTitle;
+            document.getElementById('line-home-tip').innerText = dict.lineTip;
+            localStorage.setItem('app_lang', lang);
+        }
+
+        // 4. API 设置与保存逻辑
+        function saveSettings() {
+            const apiConfig = {
+                provider: document.getElementById('api-provider').value,
+                key: document.getElementById('api-key').value,
+                url: document.getElementById('api-url').value,
+                model: document.getElementById('api-model').value,
+                prompt: document.getElementById('api-prompt').value
+            };
+            localStorage.setItem('api_config', JSON.stringify(apiConfig));
+            alert('设置已成功保存！ / Settings Saved!');
+            closeApp('settings');
+        }
+
+        // 读取已保存的配置
+        function loadSavedSettings() {
+            const savedLang = localStorage.getItem('app_lang') || 'ja';
+            document.getElementById('setting-language').value = savedLang;
+            changeLanguage(savedLang);
+
+            const savedConfig = localStorage.getItem('api_config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                if (config.provider) document.getElementById('api-provider').value = config.provider;
+                if (config.key) document.getElementById('api-key').value = config.key;
+                if (config.url) document.getElementById('api-url').value = config.url;
+                if (config.model) document.getElementById('api-model').value = config.model;
+                if (config.prompt) document.getElementById('api-prompt').value = config.prompt;
+            }
+        }
+        loadSavedSettings();
+
+        // 5. LINE 聊天功能逻辑
+        function openLineRoom(userName) {
+            document.getElementById('line-room-title').innerText = userName;
+            const msgBox = document.getElementById('line-room-messages');
+            msgBox.innerHTML = `
+                <div class="line-msg-row other">
+                    <div class="line-msg-bubble">こんにちは！今週末のカフェ、予約しておこうか？</div>
+                    <div class="line-msg-time">14:18</div>
+                </div>
+                <div class="line-msg-row self">
+                    <div class="line-msg-bubble">ありがとう！よろしくね🌸</div>
+                    <div class="line-msg-time">14:20</div>
+                </div>
+            `;
+            document.getElementById('line-room-page').classList.add('active');
+        }
+
+        function closeLineRoom() {
+            document.getElementById('line-room-page').classList.remove('active');
+        }
+
+        function sendLineMessage() {
+            const input = document.getElementById('line-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const msgBox = document.getElementById('line-room-messages');
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            const newMsg = document.createElement('div');
+            newMsg.className = 'line-msg-row self';
+            newMsg.innerHTML = `
+                <div class="line-msg-bubble">${text}</div>
+                <div class="line-msg-time">${timeStr}</div>
+            `;
+
+            msgBox.appendChild(newMsg);
+            input.value = '';
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+
+        document.getElementById('line-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendLineMessage();
+        });
+    </script>
+</body>
+</html>
