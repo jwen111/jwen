@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>iOS 全屏模拟</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com">
     </script>
@@ -12,50 +13,367 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
+    <style id="custom-css-placeholder">
+        /* =========================
+           自定义 CSS 会插入到这里
+           ========================= */
+        /* =========================
+           1. 全局基础
+           ========================= */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Noto Sans SC", sans-serif;
-            background-color: #e5e0da;
+            font-family: "Zen Maru Gothic", "Noto Sans JP", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f7f2ee;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            color: #5b514d;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
         }
 
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
         .no-scrollbar {
-            -ms-overflow-style: none;
             scrollbar-width: none;
         }
 
-        .ios-wallpaper {
-            background: linear-gradient(160deg, #F3ECE1 0%, #E8D8CE 40%, #D8DFE5 100%);
+        /* =========================
+           2. 手机整体
+           ========================= */
+        main {
+            background: #fffaf7 !important;
         }
 
-        .app-view {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        /* =========================
+           3. 主屏幕壁纸（默认）
+           ========================= */
+        .ios-wallpaper {
+            background:
+                radial-gradient(circle at 20% 15%, rgba(255, 220, 230, .75), transparent 38%),
+                radial-gradient(circle at 85% 20%, rgba(220, 235, 255, .65), transparent 42%),
+                radial-gradient(circle at 50% 90%, rgba(255, 242, 210, .55), transparent 40%),
+                linear-gradient(180deg, #fffaf8 0%, #fff4ef 45%, #f5f7ff 100%);
+            transition: background 0.5s ease;
         }
-        .app-view.hidden-app {
-            opacity: 0;
-            transform: scale(0.95);
+
+        /* 自定义壁纸背景类 */
+        .ios-wallpaper.custom-wallpaper {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .ios-wallpaper::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, .6), transparent 55%);
             pointer-events: none;
         }
+
+        /* =========================
+           4. Widget
+           ========================= */
+        #app-home>div:first-child>div {
+            background: rgba(255, 252, 250, .62) !important;
+            backdrop-filter: blur(30px) saturate(130%);
+            -webkit-backdrop-filter: blur(30px) saturate(130%);
+            border: 1px solid rgba(255, 255, 255, .7) !important;
+            box-shadow: 0 10px 30px rgba(180, 160, 150, .12), inset 0 1px rgba(255, 255, 255, .8);
+            border-radius: 26px !important;
+        }
+
+        #widget-title {
+            color: #574b47 !important;
+            letter-spacing: .02em;
+        }
+        #widget-subtitle {
+            color: #998c86 !important;
+        }
+        #widget-weather,
+        #widget-temp {
+            color: #756963 !important;
+        }
+
+        /* =========================
+           5. App 图标区域
+           ========================= */
+        #app-home .grid button>div,
+        #app-home .grid>div>div {
+            border-radius: 22px !important;
+            box-shadow: 0 8px 18px rgba(170, 150, 150, .15), inset 0 1px rgba(255, 255, 255, .45);
+            transition: transform .28s cubic-bezier(.22, .61, .36, 1), filter .25s ease;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        #app-home .grid button:active>div {
+            transform: scale(.88) !important;
+            filter: brightness(.96);
+        }
+
+        #app-home .grid span {
+            color: #665c57 !important;
+            font-weight: 600;
+            letter-spacing: .02em;
+            text-shadow: 0 1px rgba(255, 255, 255, .8);
+        }
+
+        /* =========================
+           6. Dock
+           ========================= */
+        #app-home>div:last-child {
+            background: rgba(255, 250, 248, .65) !important;
+            backdrop-filter: blur(35px) saturate(140%);
+            -webkit-backdrop-filter: blur(35px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, .75) !important;
+            box-shadow: 0 15px 35px rgba(180, 160, 150, .15), inset 0 1px rgba(255, 255, 255, .8);
+            border-radius: 32px !important;
+        }
+
+        #app-home>div:last-child>div {
+            border-radius: 18px !important;
+            box-shadow: 0 5px 12px rgba(170, 150, 150, .15), inset 0 1px rgba(255, 255, 255, .5);
+            transition: transform .25s cubic-bezier(.22, .61, .36, 1);
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        #app-home>div:last-child>div:active {
+            transform: scale(.88);
+        }
+
+        /* =========================
+           7. Home Indicator
+           ========================= */
+        main>button div {
+            background: rgba(120, 110, 105, .45) !important;
+        }
+
+        /* =========================
+           8. App 页面切换动画（无闪烁版）
+           ========================= */
+        .app-view {
+            position: absolute;
+            inset: 0;
+            display: none;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(12px) scale(0.98);
+            transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+            z-index: 20;
+        }
+
         .app-view.active-app {
+            display: flex !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: translateY(0) scale(1) !important;
+            z-index: 30;
+        }
+
+        #app-home {
+            display: flex;
             opacity: 1;
-            transform: scale(1);
             pointer-events: auto;
+            transform: none;
+            z-index: 10;
+            position: relative;
         }
 
-        .soft-shadow {
-            box-shadow: 0 4px 20px -2px rgba(175, 165, 150, 0.15);
+        #app-home.hidden-app {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
 
+        .app-view:not(#app-home) {
+            display: none;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .app-view:not(#app-home).active-app {
+            display: flex !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+
+        #line-chat-detail-view {
+            z-index: 50 !important;
+        }
+
+        /* 通用背景 */
+        #app-line,
+        #app-contacts,
+        #app-settings,
+        #app-ins {
+            background: #fffaf7 !important;
+        }
+
+        #app-line>div:first-child,
+        #app-contacts>div:first-child,
+        #app-settings>div:first-child {
+            background: rgba(255, 250, 248, .82) !important;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-color: rgba(230, 220, 215, .5) !important;
+        }
+
+        #app-line h1,
+        #app-contacts h2,
+        #app-settings h2 {
+            color: #514844 !important;
+            letter-spacing: .02em;
+        }
+
+        #line-username-display {
+            color: #4c433f !important;
+            font-weight: 800;
+        }
+        #line-user-status {
+            color: #a09590 !important;
+        }
+        #app-line input {
+            background: #f7f3f1 !important;
+            border: none !important;
+        }
+        #app-line input::placeholder {
+            color: #b5aaa4;
+        }
+
+        #app-line .grid .rounded-full {
+            background: #fff4f1;
+            transition: transform .25s ease;
+        }
+        #app-line .grid div:active .rounded-full {
+            transform: scale(.9);
+        }
+
+        #line-friends-list>div {
+            border-radius: 18px;
+            padding: 10px;
+            background: rgba(255, 255, 255, .65);
+            margin-bottom: 8px;
+        }
+
+        #app-line>div:last-child {
+            background: rgba(255, 250, 248, .9) !important;
+            backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(230, 220, 215, .6) !important;
+        }
+
+        #app-line #line-chat-detail-view {
+            background: linear-gradient(180deg, #d9ecff 0%, #eaf3ff 100%) !important;
+            z-index: 40;
+        }
+
+        #chat-title-name {
+            color: #514844;
+        }
+        #app-line #line-chat-detail-view>div:first-child {
+            background: rgba(255, 255, 255, .55) !important;
+            color: #514844 !important;
+            border-color: rgba(255, 255, 255, .5) !important;
+        }
+
+        .message-bubble-sent {
+            background: #ffdce8 !important;
+            color: #5c5050 !important;
+            border-radius: 20px 20px 5px 20px;
+            box-shadow: 0 5px 12px rgba(220, 170, 180, .18);
+            width: fit-content;
+            max-width: 75%;
+            margin-left: auto;
+            margin-right: 0;
+            margin-bottom: 8px;
+            padding: 8px 14px;
+            word-break: break-word;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message-bubble-received {
+            background: rgba(255, 255, 255, .92) !important;
+            color: #5c5050 !important;
+            border-radius: 20px 20px 20px 5px;
+            box-shadow: 0 5px 12px rgba(170, 160, 160, .1);
+            width: fit-content;
+            max-width: 75%;
+            margin-right: auto;
+            margin-left: 0;
+            margin-bottom: 8px;
+            padding: 8px 14px;
+            word-break: break-word;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        #chat-input-field {
+            background: #f7f3f1 !important;
+        }
+        #chat-send-btn {
+            background: #ff9fba !important;
+            color: white;
+            border-radius: 20px;
+        }
+        #chat-send-btn:active {
+            transform: scale(.9);
+        }
+
+        .fa-user-plus {
+            color: #ff9fba;
+        }
+
+        /* 通讯录 */
+        #app-contacts {
+            background: #fffaf7 !important;
+        }
+        #contacts-list {
+            padding-top: 10px;
+        }
+        #contacts-list>div {
+            background: rgba(255, 255, 255, .75);
+            border: 1px solid rgba(235, 225, 220, .6);
+            border-radius: 22px;
+            box-shadow: 0 6px 18px rgba(180, 160, 150, .08);
+            padding: 14px;
+        }
+        #contacts-list img {
+            border-radius: 18px !important;
+            box-shadow: 0 4px 12px rgba(170, 150, 150, .15);
+        }
+        #app-contacts .fa-plus {
+            color: #ff9fba;
+        }
+
+        /* 弹窗样式 */
         .modal-overlay {
-            transition: opacity 0.25s ease, visibility 0.25s ease;
+            background: rgba(90, 80, 80, .25) !important;
+            backdrop-filter: blur(8px);
+            transition: opacity .3s ease;
+            z-index: 999;
         }
+
         .modal-sheet {
-            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+            background: #fffaf8 !important;
+            border-radius: 32px 32px 0 0 !important;
+            box-shadow: 0 -10px 40px rgba(150, 130, 120, .18) !important;
+            transition: transform .3s ease;
         }
+
         .modal-sheet.slide-up {
             transform: translateY(0);
         }
@@ -63,78 +381,175 @@
             transform: translateY(100%);
         }
 
-        .active\:scale-98:active {
-            transform: scale(0.98);
+        .modal-sheet>div:first-child {
+            border-color: #f2e8e3 !important;
         }
-        .active\:scale-95:active {
-            transform: scale(0.95);
+        .modal-sheet h2 {
+            color: #514844 !important;
         }
-
-        .message-bubble-sent {
-            background: #06C755;
-            color: white;
-            border-radius: 18px 18px 4px 18px;
-            padding: 8px 14px;
-            max-width: 80%;
-            word-wrap: break-word;
-            font-size: 13px;
-            align-self: flex-end;
+        .modal-sheet span {
+            color: #aaa09a !important;
         }
-        .message-bubble-received {
-            background: white;
-            color: #1a1a1a;
-            border-radius: 18px 18px 18px 4px;
-            padding: 8px 14px;
-            max-width: 80%;
-            word-wrap: break-word;
-            font-size: 13px;
-            align-self: flex-start;
+        .modal-sheet button {
+            color: #ff8fab;
         }
 
-        #chat-messages-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+        .modal-sheet .bg-stone-50 {
+            background: #fff5f1 !important;
+            border-color: #f2e5df !important;
+            border-radius: 24px !important;
         }
 
-        select#api-model-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
+        .modal-sheet input,
+        .modal-sheet textarea {
+            background: #ffffff !important;
+            border-color: #eadfd9 !important;
+            border-radius: 16px !important;
+            color: #514844 !important;
         }
 
-        .spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid #e5e7eb;
-            border-top: 2px solid #06C755;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .modal-sheet input::placeholder,
+        .modal-sheet textarea::placeholder {
+            color: #c0b5af;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .modal-sheet input:focus,
+        .modal-sheet textarea:focus {
+            border-color: #ffb4c7 !important;
+            box-shadow: 0 0 0 3px rgba(255, 180, 199, .15);
+        }
+
+        #preview-avatar,
+        #user-profile-avatar {
+            border-radius: 22px !important;
+        }
+        .user-avatar-edit img {
+            border-radius: 50% !important;
+        }
+
+        .modal-sheet button.bg-white {
+            border-color: #eadfd9 !important;
+            color: #716762 !important;
+            border-radius: 16px !important;
+        }
+
+        #generate-btn {
+            background: linear-gradient(135deg, #ffb6c9, #ffc8d8) !important;
+            border-radius: 18px !important;
+            box-shadow: 0 5px 12px rgba(255, 160, 190, .25);
+        }
+
+        .modal-sheet button.bg-stone-200 {
+            background: #f3ebe7 !important;
+            color: #746963 !important;
+            border-radius: 16px !important;
+        }
+
+        #radio-id-inner {
+            background: #ff9fba !important;
+        }
+        #radio-id-outer {
+            border-color: #ff9fba !important;
+        }
+        #modal-line-search-friends input {
+            background: #f7f1ee !important;
+            border-radius: 18px !important;
+        }
+
+        #app-ins {
+            background: #fffaf8 !important;
+        }
+        .ins-post-card {
+            background: rgba(255, 255, 255, .75);
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(180, 160, 150, .1);
+            border: 1px solid rgba(235, 225, 220, .5);
+        }
+        .ins-post-card:hover {
+            background: #fff !important;
+        }
+
+        #app-settings {
+            background: #fffaf7 !important;
+        }
+        #app-settings .text-stone-400 {
+            color: #b3a6a0 !important;
+            letter-spacing: .08em;
+        }
+        #app-settings .bg-white {
+            background: rgba(255, 255, 255, .8) !important;
+            border-color: #eee2dc !important;
+            border-radius: 24px !important;
+            box-shadow: 0 6px 18px rgba(180, 160, 150, .08);
+        }
+
+        #app-settings label {
+            transition: background .2s ease;
+        }
+        #app-settings label:active {
+            background: #fff2f5;
+        }
+
+        #app-settings input,
+        #app-settings select,
+        #app-settings textarea {
+            background: #fff8f5 !important;
+            border-color: #eadfd9 !important;
+            border-radius: 16px !important;
+            color: #5b514d !important;
+        }
+        #app-settings input::placeholder,
+        #app-settings textarea::placeholder {
+            color: #c3b7b1;
+        }
+        #app-settings input:focus,
+        #app-settings select:focus,
+        #app-settings textarea:focus {
+            border-color: #ffadc4 !important;
+            box-shadow: 0 0 0 3px rgba(255, 170, 195, .15);
+        }
+
+        #fetch-models-btn {
+            background: linear-gradient(135deg, #ffc3d5, #ffabc4) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 5px 15px rgba(255, 170, 195, .25);
+        }
+
+        #app-settings button.bg-stone-800 {
+            background: #5b514d !important;
+            border-radius: 18px !important;
+            box-shadow: 0 6px 15px rgba(80, 70, 65, .18);
+        }
+
+        button {
+            transition: transform .22s cubic-bezier(.22, .61, .36, 1), opacity .2s ease;
+        }
+        button:active {
+            transform: scale(.94);
+        }
+        input,
+        textarea,
+        select {
+            outline: none;
         }
 
         .typing-indicator {
-            display: flex;
+            background: rgba(255, 255, 255, .9) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 5px 12px rgba(170, 160, 160, .1);
+            display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 8px 14px;
-            background: white;
-            border-radius: 18px 18px 18px 4px;
-            align-self: flex-start;
+            padding: 10px 16px;
+            margin-bottom: 8px;
         }
+
         .typing-indicator span {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: #999;
+            background: #d9a8ba !important;
+            display: block;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            animation: typingBounce 1.4s infinite both;
+            animation: typingDot 1.4s infinite both;
         }
         .typing-indicator span:nth-child(2) {
             animation-delay: 0.2s;
@@ -142,30 +557,71 @@
         .typing-indicator span:nth-child(3) {
             animation-delay: 0.4s;
         }
-        @keyframes typingBounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-6px); }
+
+        @keyframes typingDot {
+            0%,
+            60%,
+            100% {
+                transform: scale(0.4);
+                opacity: 0.4;
+            }
+            30% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
-        .user-avatar-edit {
-            position: relative;
-            cursor: pointer;
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3dfe6;
+            border-top-color: #ff9fba;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
         }
-        .user-avatar-edit:hover .user-avatar-overlay {
-            opacity: 1;
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
-        .user-avatar-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            opacity: 0;
-            transition: opacity 0.2s;
+
+        #screen-container {
+            scrollbar-width: none;
+        }
+        #screen-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        main>button {
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .rounded-2xl {
+            border-radius: 22px !important;
+        }
+        .rounded-xl {
+            border-radius: 16px !important;
+        }
+        h1,
+        h2,
+        h3 {
+            letter-spacing: .02em;
+        }
+        .text-xs {
+            line-height: 1.5;
+        }
+
+        @media(max-width:430px) {
+            #app-home .grid button>div {
+                width: 54px !important;
+                height: 54px !important;
+            }
+            #app-home .grid {
+                gap-y: 22px;
+            }
         }
     </style>
 </head>
@@ -180,68 +636,85 @@
             <!-- ================= 主屏幕 (HOME) ================= -->
             <div id="app-home" class="w-full h-full ios-wallpaper p-5 pt-8 flex flex-col justify-between">
                 <div>
-                    <div class="bg-white/75 backdrop-blur-md rounded-3xl p-4 soft-shadow border border-white/60">
-                        <div class="text-xs font-semibold text-stone-400 uppercase tracking-wider" id="widget-date">7月29日 周三</div>
-                        <div class="text-2xl font-bold text-stone-800 mt-1" id="widget-greeting">祝您度过美好的一天 🌸</div>
-                        <div class="mt-3 flex items-center justify-between text-xs text-stone-600 bg-white/60 px-3 py-1.5 rounded-xl border border-white/40">
-                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-sun text-amber-400"></i> Tokyo 24°C</span>
-                            <span class="text-stone-400">晴朗</span>
+                    <div class="bg-white/40 dark:bg-black/40 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/20">
+                        <h2 id="widget-title" onclick="editSingleWidget('title', '主文案', '猫しか勝たん！！')"
+                            class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white mb-1 cursor-pointer hover:opacity-80 transition-opacity">
+                            猫しか勝たん！！
+                        </h2>
+                        <p id="widget-subtitle" onclick="editSingleWidget('subtitle', '副标题', '喵喵喵喵喵~')"
+                            class="text-xs text-gray-500 dark:text-gray-300 mb-2 cursor-pointer hover:opacity-80 transition-opacity">
+                            喵喵喵喵喵~
+                        </p>
+                        <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-200">
+                            <span id="widget-weather" onclick="editSingleWidget('weather', '天气', '晴朗 ☀️')" class="cursor-pointer hover:opacity-80 transition-opacity">晴朗 ☀️</span>
+                            <span class="text-gray-400">|</span>
+                            <span id="widget-temp" onclick="editSingleWidget('temp', '温度', '25°C')" class="cursor-pointer hover:opacity-80 transition-opacity">25°C</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-4 gap-y-6 gap-x-4 px-2 my-auto">
-                    <button onclick="openApp('line')" class="flex flex-col items-center gap-1.5 group">
-                        <div class="w-14 h-14 bg-[#06C755] rounded-[18px] flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-500/20 group-active:scale-95 transition-transform">
+                <!-- 主屏幕图标列表 -->
+                <div class="grid grid-cols-4 gap-y-6 gap-x-4 px-2 my-auto" id="home-grid">
+                    <!-- LINE -->
+                    <button onclick="openApp('line')" class="flex flex-col items-center gap-1.5 group" data-app="line">
+                        <div class="w-14 h-14 bg-[#06C755] rounded-[18px] flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-500/20 group-active:scale-95 transition-transform" id="icon-line">
                             <i class="fa-comment-dots fa-solid"></i>
                         </div>
                         <span class="text-[11px] font-medium text-stone-700 tracking-tight">LINE</span>
                     </button>
-                    <button onclick="openApp('ins')" class="flex flex-col items-center gap-1.5 group">
-                        <div class="w-14 h-14 bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 rounded-[18px] flex items-center justify-center text-white text-2xl shadow-lg shadow-rose-500/20 group-active:scale-95 transition-transform">
+                    <!-- Instagram -->
+                    <button onclick="openApp('ins')" class="flex flex-col items-center gap-1.5 group" data-app="ins">
+                        <div class="w-14 h-14 bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 rounded-[18px] flex items-center justify-center text-white text-2xl shadow-lg shadow-rose-500/20 group-active:scale-95 transition-transform" id="icon-ins">
                             <i class="fa-brands fa-instagram"></i>
                         </div>
                         <span class="text-[11px] font-medium text-stone-700 tracking-tight">Instagram</span>
                     </button>
-                    <button onclick="openApp('x')" class="flex flex-col items-center gap-1.5 group">
-                        <div class="w-14 h-14 bg-stone-900 rounded-[18px] flex items-center justify-center text-white text-2xl shadow-lg shadow-stone-900/20 group-active:scale-95 transition-transform">
-                            <i class="fa-brands fa-x-twitter"></i>
-                        </div>
-                        <span class="text-[11px] font-medium text-stone-700 tracking-tight">X</span>
-                    </button>
-                    <button onclick="openApp('contacts')" class="flex flex-col items-center gap-1.5 group">
-                        <div class="w-14 h-14 bg-stone-300 rounded-[18px] flex items-center justify-center text-stone-700 text-2xl shadow-lg shadow-stone-400/20 group-active:scale-95 transition-transform">
+                    <!-- 通讯录 -->
+                    <button onclick="openApp('contacts')" class="flex flex-col items-center gap-1.5 group" data-app="contacts">
+                        <div class="w-14 h-14 bg-stone-300 rounded-[18px] flex items-center justify-center text-stone-700 text-2xl shadow-lg shadow-stone-400/20 group-active:scale-95 transition-transform" id="icon-contacts">
                             <i class="fa-solid fa-address-book"></i>
                         </div>
                         <span class="text-[11px] font-medium text-stone-700 tracking-tight">通讯录</span>
                     </button>
-                    <button onclick="openApp('settings')" class="flex flex-col items-center gap-1.5 group">
-                        <div class="w-14 h-14 bg-stone-200/90 backdrop-blur rounded-[18px] flex items-center justify-center text-stone-700 text-2xl shadow-md border border-white/80 group-active:scale-95 transition-transform">
+                    <!-- 设置 -->
+                    <button onclick="openApp('settings')" class="flex flex-col items-center gap-1.5 group" data-app="settings">
+                        <div class="w-14 h-14 bg-stone-200/90 backdrop-blur rounded-[18px] flex items-center justify-center text-stone-700 text-2xl shadow-md border border-white/80 group-active:scale-95 transition-transform" id="icon-settings">
                             <i class="fa-solid fa-gear"></i>
                         </div>
                         <span class="text-[11px] font-medium text-stone-700 tracking-tight">设置</span>
                     </button>
+                    <!-- 时钟（占位） -->
                     <div class="flex flex-col items-center gap-1.5 opacity-60">
                         <div class="w-14 h-14 bg-sky-400 rounded-[18px] flex items-center justify-center text-white text-2xl shadow-md">
                             <i class="fa-regular fa-clock"></i>
                         </div>
                         <span class="text-[11px] font-medium text-stone-700">时钟</span>
                     </div>
+                    <!-- 相册（占位） -->
                     <div class="flex flex-col items-center gap-1.5 opacity-60">
                         <div class="w-14 h-14 bg-amber-400 rounded-[18px] flex items-center justify-center text-white text-2xl shadow-md">
                             <i class="fa-solid fa-images"></i>
                         </div>
                         <span class="text-[11px] font-medium text-stone-700">相册</span>
                     </div>
+                    <!-- 音乐（占位） -->
                     <div class="flex flex-col items-center gap-1.5 opacity-60">
                         <div class="w-14 h-14 bg-rose-400 rounded-[18px] flex items-center justify-center text-white text-2xl shadow-md">
                             <i class="fa-solid fa-music"></i>
                         </div>
                         <span class="text-[11px] font-medium text-stone-700">音乐</span>
                     </div>
+                    <!-- 空位 -->
+                    <div class="flex flex-col items-center gap-1.5 opacity-40">
+                        <div class="w-14 h-14 bg-stone-300/50 rounded-[18px] flex items-center justify-center text-stone-400 text-2xl">
+                            <i class="fa-solid fa-square"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-stone-400">空位</span>
+                    </div>
                 </div>
 
-                <div class="bg-white/40 backdrop-blur-xl rounded-[28px] p-2.5 flex justify-around items-center border border-white/50 shadow-sm mb-2">
+                <!-- Dock -->
+                <div class="bg-white/40 backdrop-blur-xl rounded-[28px] p-2.5 flex justify-around items-center border border-white/50 shadow-sm mb-2" id="dock-container">
                     <div class="w-12 h-12 bg-emerald-500 rounded-[16px] flex items-center justify-center text-white text-xl shadow-md">
                         <i class="fa-solid fa-phone"></i>
                     </div>
@@ -258,7 +731,7 @@
             </div>
 
             <!-- ================= 通讯录 App ================= -->
-            <div id="app-contacts" class="app-view hidden-app absolute inset-0 bg-stone-50 z-20 flex flex-col pt-4">
+            <div id="app-contacts" class="app-view bg-stone-50 flex flex-col pt-4">
                 <div class="bg-white/90 backdrop-blur px-4 py-3 border-b border-stone-200/60 sticky top-0 z-10 flex items-center justify-between">
                     <h2 class="text-base font-bold text-stone-800">通讯录</h2>
                     <button onclick="openCreateCharacterModal()" class="text-sky-500 hover:text-sky-600 p-1 text-lg active:scale-95 transition-transform">
@@ -268,7 +741,7 @@
                 <div class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar" id="contacts-list"></div>
 
                 <!-- 新建 / 编辑角色弹窗 -->
-                <div id="modal-create-character" class="modal-overlay absolute inset-0 bg-black/40 z-50 flex flex-col justify-end opacity-0 pointer-events-none">
+                <div id="modal-create-character" class="modal-overlay absolute inset-0 bg-black/40 flex flex-col justify-end opacity-0 pointer-events-none">
                     <div id="modal-create-sheet" class="modal-sheet slide-down w-full h-[95%] bg-white rounded-t-2xl flex flex-col pt-3 px-5 pb-6 shadow-2xl">
                         <div class="flex items-center justify-between py-2 mb-2 border-b border-stone-100">
                             <span class="text-xs font-semibold text-stone-400 cursor-pointer" onclick="closeCreateCharacterModal()">取消</span>
@@ -328,9 +801,7 @@
             </div>
 
             <!-- ================= LINE App ================= -->
-            <div id="app-line" class="app-view hidden-app absolute inset-0 bg-white z-20 flex flex-col pt-4">
-
-                <!-- Tab 1: 主页视图 -->
+            <div id="app-line" class="app-view bg-white flex flex-col pt-4">
                 <div id="line-tab-view-home" class="flex-1 overflow-y-auto no-scrollbar px-4 pt-2 pb-16">
                     <div class="flex justify-end items-center gap-4 text-stone-800 text-lg py-2">
                         <i class="fa-regular fa-bookmark"></i>
@@ -339,7 +810,6 @@
                         <i class="fa-solid fa-gear cursor-pointer" onclick="openApp('settings')"></i>
                     </div>
 
-                    <!-- User 信息 - 可点击编辑 -->
                     <div class="flex justify-between items-center my-3">
                         <div class="flex-1">
                             <div class="flex items-center gap-2">
@@ -352,9 +822,6 @@
                         </div>
                         <div class="user-avatar-edit" onclick="openUserProfileModal()">
                             <img id="line-user-avatar" src="https://via.placeholder.com/120/06C755/ffffff?text=ME" class="w-14 h-14 rounded-full object-cover border border-stone-100 shadow-sm">
-                            <div class="user-avatar-overlay">
-                                <i class="fa-solid fa-camera"></i>
-                            </div>
                         </div>
                     </div>
 
@@ -408,7 +875,6 @@
                     </div>
                 </div>
 
-                <!-- Tab 2: 聊天列表视图 -->
                 <div id="line-tab-view-chats" class="flex-1 overflow-y-auto no-scrollbar px-4 pt-2 pb-16 hidden">
                     <div class="flex justify-between items-center py-2 mb-2">
                         <h1 class="text-2xl font-extrabold text-black tracking-tight">聊天</h1>
@@ -422,13 +888,11 @@
                     </div>
                 </div>
 
-                <!-- Tab 3: 通话视图 -->
                 <div id="line-tab-view-calls" class="flex-1 flex items-center justify-center text-xs text-stone-400 hidden">
                     暂无通话记录
                 </div>
 
-                <!-- 聊天详情界面 -->
-                <div id="line-chat-detail-view" class="absolute inset-0 bg-[#8cabd9] z-40 flex flex-col hidden">
+                <div id="line-chat-detail-view" class="absolute inset-0 bg-[#8cabd9] flex flex-col hidden">
                     <div class="bg-[#8cabd9]/90 backdrop-blur px-4 py-2 border-b border-white/20 flex items-center justify-between text-white">
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-chevron-left text-lg cursor-pointer" onclick="closeChatDetail()"></i>
@@ -441,7 +905,7 @@
                         </div>
                     </div>
 
-                    <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto no-scrollbar">
+                    <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto no-scrollbar flex flex-col">
                         <div class="text-center text-[10px] text-white/70 my-2" id="chat-welcome-msg">我们已经是好友了，现在可以开始聊天了</div>
                     </div>
 
@@ -457,7 +921,6 @@
                     </div>
                 </div>
 
-                <!-- LINE 底部导航 -->
                 <div class="absolute bottom-0 left-0 w-full bg-white border-t border-stone-100 py-2 px-8 flex justify-around items-center z-30">
                     <button onclick="switchLineTab('home')" id="tab-btn-home" class="flex flex-col items-center gap-0.5 text-black">
                         <i class="fa-solid fa-house text-lg"></i>
@@ -473,8 +936,7 @@
                     </button>
                 </div>
 
-                <!-- LINE 添加好友抽屉 -->
-                <div id="modal-line-add-friends" class="modal-overlay absolute inset-0 bg-black/40 z-40 flex flex-col justify-end opacity-0 pointer-events-none">
+                <div id="modal-line-add-friends" class="modal-overlay absolute inset-0 bg-black/40 flex flex-col justify-end opacity-0 pointer-events-none">
                     <div id="modal-sheet-content" class="modal-sheet slide-down w-full h-[93%] bg-white rounded-t-2xl flex flex-col pt-3 px-5 pb-6 shadow-2xl">
                         <div class="flex items-center justify-between py-2 mb-2">
                             <i class="fa-solid fa-gear text-stone-800 text-lg cursor-pointer" onclick="openApp('settings')"></i>
@@ -510,8 +972,7 @@
                     </div>
                 </div>
 
-                <!-- LINE 搜索好友抽屉 -->
-                <div id="modal-line-search-friends" class="modal-overlay absolute inset-0 bg-black/40 z-50 flex flex-col justify-end opacity-0 pointer-events-none">
+                <div id="modal-line-search-friends" class="modal-overlay absolute inset-0 bg-black/40 flex flex-col justify-end opacity-0 pointer-events-none">
                     <div id="modal-search-sheet-content" class="modal-sheet slide-down w-full h-[93%] bg-white rounded-t-2xl flex flex-col pt-3 px-5 pb-6 shadow-2xl">
                         <div class="flex items-center justify-between py-2 mb-4">
                             <i class="fa-solid fa-chevron-left text-stone-800 text-lg cursor-pointer" onclick="backToAddFriendsModal()"></i>
@@ -541,7 +1002,7 @@
             </div>
 
             <!-- User 资料编辑弹窗 -->
-            <div id="modal-user-profile" class="modal-overlay absolute inset-0 bg-black/40 z-50 flex flex-col justify-end opacity-0 pointer-events-none">
+            <div id="modal-user-profile" class="modal-overlay absolute inset-0 bg-black/40 flex flex-col justify-end opacity-0 pointer-events-none">
                 <div id="modal-user-sheet" class="modal-sheet slide-down w-full h-[85%] bg-white rounded-t-2xl flex flex-col pt-3 px-5 pb-6 shadow-2xl">
                     <div class="flex items-center justify-between py-2 mb-2 border-b border-stone-100">
                         <span class="text-xs font-semibold text-stone-400 cursor-pointer" onclick="closeUserProfileModal()">取消</span>
@@ -580,56 +1041,50 @@
                 </div>
             </div>
 
-            <!-- ================= Instagram App ================= -->
-            <div id="app-ins" class="app-view hidden-app absolute inset-0 bg-white z-20 flex flex-col pt-4">
-                <div class="bg-white border-b border-stone-100 px-4 py-2 flex items-center justify-between sticky top-0 z-10">
-                    <span class="font-serif italic font-bold text-xl tracking-tight text-stone-900">Instagram</span>
-                    <div class="flex items-center gap-4 text-lg text-stone-800">
-                        <i class="fa-regular fa-heart"></i>
-                        <i class="fa-regular fa-paper-plane"></i>
-                    </div>
-                </div>
-                <div class="flex-1 overflow-y-auto no-scrollbar">
-                    <div class="flex gap-3 px-4 py-3 border-b border-stone-100 overflow-x-auto no-scrollbar">
-                        <div class="flex flex-col items-center gap-1 flex-shrink-0">
-                            <div class="p-0.5 rounded-full border border-stone-200"><img src="https://via.placeholder.com/100/06C755/ffffff?text=IG" class="w-11 h-11 rounded-full object-cover"></div>
-                            <span class="text-[10px] text-stone-500">限时动态</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= X App ================= -->
-            <div id="app-x" class="app-view hidden-app absolute inset-0 bg-white z-20 flex flex-col pt-4">
-                <div class="bg-white border-b border-stone-100 sticky top-0 z-10">
-                    <div class="flex justify-between items-center px-4 py-2">
-                        <img src="https://via.placeholder.com/100/000000/ffffff?text=X" class="w-7 h-7 rounded-full object-cover">
-                        <i class="fa-brands fa-x-twitter text-lg text-stone-900"></i>
-                        <i class="fa-solid fa-gear text-stone-600 text-xs"></i>
-                    </div>
+            <!-- ================= Ins App ================= -->
+            <div id="app-ins" class="app-view bg-white flex flex-col pt-4">
+                <div class="flex-1 overflow-y-auto no-scrollbar px-4 pt-2 pb-20" id="ins-feed-container">
                 </div>
             </div>
 
             <!-- ================= 设置 App ================= -->
-            <div id="app-settings" class="app-view hidden-app absolute inset-0 bg-stone-100 z-20 flex flex-col pt-4">
+            <div id="app-settings" class="app-view bg-stone-100 flex flex-col pt-4">
                 <div class="bg-white/90 backdrop-blur px-4 py-3 border-b border-stone-200/60 sticky top-0 z-10 flex items-center justify-between">
                     <h2 class="text-base font-bold text-stone-800">设置</h2>
                     <button onclick="goHome()" class="text-xs font-semibold text-rose-500">完成</button>
                 </div>
 
                 <div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs no-scrollbar">
+                    <!-- ========== 1. 壁纸设置 ========== -->
                     <div>
-                        <div class="text-stone-400 px-2 mb-1.5 uppercase tracking-wider text-[10px] font-semibold">语言 / LANGUAGE</div>
-                        <div class="bg-white rounded-2xl border border-stone-200/60 overflow-hidden divide-y divide-stone-100">
-                            <label class="flex items-center justify-between p-3 cursor-pointer hover:bg-stone-50">
-                                <span class="font-medium text-stone-700">简体中文</span>
-                                <input type="radio" name="lang" value="zh" checked class="accent-rose-500">
-                            </label>
+                        <div class="text-stone-400 px-2 mb-1.5 uppercase tracking-wider text-[10px] font-semibold">🖼️ 主页壁纸</div>
+                        <div class="bg-white rounded-2xl border border-stone-200/60 p-3 space-y-3">
+                            <div class="flex items-center gap-3">
+                                <input type="file" id="wallpaper-input" accept="image/*" class="hidden" onchange="handleWallpaperUpload(event)">
+                                <button onclick="document.getElementById('wallpaper-input').click()" class="bg-stone-50 border border-stone-200 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 hover:bg-stone-100 active:scale-95 transition-transform">
+                                    <i class="fa-solid fa-image mr-1"></i> 选择图片
+                                </button>
+                                <button onclick="resetWallpaper()" class="bg-stone-50 border border-stone-200 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 hover:bg-stone-100 active:scale-95 transition-transform">
+                                    <i class="fa-solid fa-undo mr-1"></i> 恢复默认
+                                </button>
+                            </div>
+                            <div id="wallpaper-preview" class="w-full h-24 rounded-xl border border-stone-200 bg-stone-100 flex items-center justify-center text-stone-400 text-xs" style="background-size:cover;background-position:center;">
+                                未设置自定义壁纸
+                            </div>
                         </div>
                     </div>
 
+                    <!-- ========== 2. 图标自定义 ========== -->
                     <div>
-                        <div class="text-stone-400 px-2 mb-1.5 uppercase tracking-wider text-[10px] font-semibold">API 连接设置</div>
+                        <div class="text-stone-400 px-2 mb-1.5 uppercase tracking-wider text-[10px] font-semibold">🎨 应用图标</div>
+                        <div class="bg-white rounded-2xl border border-stone-200/60 p-3 space-y-3" id="icon-settings-container">
+                            <!-- 由 JS 动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- ========== 3. API 设置 ========== -->
+                    <div>
+                        <div class="text-stone-400 px-2 mb-1.5 uppercase tracking-wider text-[10px] font-semibold">⚙️ API 连接设置</div>
                         <div class="bg-white rounded-2xl border border-stone-200/60 p-3 space-y-3">
                             <div>
                                 <label class="block text-stone-500 mb-1 font-medium">Base URL</label>
@@ -656,13 +1111,33 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- ========== 4. 自定义 CSS ========== -->
+                    <div>
+                        <div class="text-stone-400 px-2 mb-1.5 uppercase tracking-wider text-[10px] font-semibold">🎨 自定义 CSS</div>
+                        <div class="bg-white rounded-2xl border border-stone-200/60 p-3 space-y-3">
+                            <div>
+                                <label class="block text-stone-500 mb-1 font-medium">自定义样式（覆盖默认）</label>
+                                <textarea id="custom-css-input" rows="6" placeholder="/* 在这里粘贴自定义 CSS */&#10;.ios-wallpaper { opacity: 0.9; }&#10;#widget-title { color: #ff6b6b !important; }" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-700 focus:outline-none focus:ring-1 focus:ring-rose-400 font-mono"></textarea>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="saveCustomCSS()" class="flex-1 bg-stone-800 text-white font-medium py-2 rounded-xl active:scale-98 transition-transform">
+                                    <i class="fa-solid fa-save mr-1"></i> 应用 CSS
+                                </button>
+                                <button onclick="resetCustomCSS()" class="bg-stone-200 text-stone-700 font-medium px-4 py-2 rounded-xl active:scale-95 transition-transform">
+                                    <i class="fa-solid fa-undo"></i>
+                                </button>
+                            </div>
+                            <p class="text-[10px] text-stone-400">💡 修改会实时生效，如需恢复点击撤销按钮</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
 
         <!-- iOS 底部 Home Indicator Bar -->
-        <button onclick="goHome()" class="w-full bg-transparent py-2 flex justify-center items-center absolute bottom-0 left-0 z-50 cursor-pointer active:opacity-60">
+        <button onclick="goHome()" class="w-full bg-transparent py-2 flex justify-center items-center absolute bottom-0 left-0 cursor-pointer active:opacity-60 z-50">
             <div class="w-32 h-1 bg-stone-400/80 hover:bg-stone-600 rounded-full transition-colors"></div>
         </button>
 
@@ -673,6 +1148,15 @@
         const DEFAULT_AVATAR = "https://via.placeholder.com/60/06C755/ffffff?text=AI";
         const DEFAULT_USER_AVATAR = "https://via.placeholder.com/120/06C755/ffffff?text=ME";
 
+        // 默认图标配置
+        const DEFAULT_ICON_CONFIG = {
+            line: { bg: '#06C755', icon: 'fa-comment-dots', color: '#ffffff' },
+            ins: { bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', icon: 'fa-brands fa-instagram',
+            color: '#ffffff' },
+            contacts: { bg: '#a8a29e', icon: 'fa-solid fa-address-book', color: '#ffffff' },
+            settings: { bg: '#d6d3d1', icon: 'fa-solid fa-gear', color: '#44403c' }
+        };
+
         let currentAvatarData = DEFAULT_AVATAR;
         let createdCharactersList = [];
         let addedLineFriends = [];
@@ -681,8 +1165,30 @@
         let currentChatFriend = null;
         let availableModels = [];
         let isWaitingForAIResponse = false;
+        let isTransitioning = false;
 
-        // ========== User 数据 ==========
+        // 图标自定义数据
+        let iconCustomData = {};
+
+        // ========== Ins 帖子预设 ==========
+        let insPosts = [{
+            username: "猫咪观察员",
+            avatar: "🐱",
+            isFriend: false,
+            timeAgo: "2小时前",
+            imageDescription: "阳光穿过百叶窗洒在浅木色地板上，一只三花猫懒洋洋地蜷缩在光斑里，尾巴微微卷起。画面采用了暖色调滤镜，充满宁静温馨的午后氛围。",
+            caption: "今天也是被猫咪治愈的一天 ✨ #猫奴日常 #午后阳光",
+            likes: 342
+        }, {
+            username: "AI_Partner",
+            avatar: "🌸",
+            isFriend: true,
+            timeAgo: "刚刚",
+            imageDescription: "一间温馨的书房角落，木质书桌上摆着一杯冒着轻微热气的咖啡，旁边散落着几本打开的笔记。窗外是微昏的天色，室内柔和的台灯光芒营造出极具陪伴感的氛围。",
+            caption: "刚刚聊到的那本书终于翻完了，感觉很奇妙呢~ ☕",
+            likes: 88
+        }];
+
         let userData = {
             name: '我',
             status: '输入状态消息',
@@ -692,12 +1198,254 @@
 
         let chatHistories = {};
 
-        // ========== ⭐ 统一数据持久化函数 ==========
+        // ========== 壁纸功能 ==========
+        function handleWallpaperUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const imageUrl = evt.target.result;
+                    applyWallpaper(imageUrl);
+                    localStorage.setItem('custom_wallpaper', imageUrl);
+                    document.getElementById('wallpaper-preview').style.backgroundImage = `url(${imageUrl})`;
+                    document.getElementById('wallpaper-preview').textContent = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function applyWallpaper(url) {
+            const home = document.getElementById('app-home');
+            home.classList.add('custom-wallpaper');
+            home.style.backgroundImage = `url(${url})`;
+            home.style.backgroundSize = 'cover';
+            home.style.backgroundPosition = 'center';
+        }
+
+        function resetWallpaper() {
+            const home = document.getElementById('app-home');
+            home.classList.remove('custom-wallpaper');
+            home.style.backgroundImage = '';
+            home.style.backgroundSize = '';
+            home.style.backgroundPosition = '';
+            localStorage.removeItem('custom_wallpaper');
+            document.getElementById('wallpaper-preview').style.backgroundImage = '';
+            document.getElementById('wallpaper-preview').textContent = '未设置自定义壁纸';
+        }
+
+        function loadWallpaper() {
+            const saved = localStorage.getItem('custom_wallpaper');
+            if (saved) {
+                applyWallpaper(saved);
+                document.getElementById('wallpaper-preview').style.backgroundImage = `url(${saved})`;
+                document.getElementById('wallpaper-preview').textContent = '';
+            }
+        }
+
+        // ========== 图标自定义功能 ==========
+        function loadIconSettings() {
+            const saved = localStorage.getItem('icon_custom_data');
+            if (saved) {
+                try { iconCustomData = JSON.parse(saved); } catch (e) {}
+            }
+            renderIconSettings();
+            applyIconCustomizations();
+        }
+
+        function renderIconSettings() {
+            const container = document.getElementById('icon-settings-container');
+            if (!container) return;
+
+            const apps = [
+                { key: 'line', name: 'LINE', defaultBg: '#06C755', defaultIcon: 'fa-comment-dots' },
+                { key: 'ins', name: 'Instagram', defaultBg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    defaultIcon: 'fa-brands fa-instagram' },
+                { key: 'contacts', name: '通讯录', defaultBg: '#a8a29e', defaultIcon: 'fa-solid fa-address-book' },
+                { key: 'settings', name: '设置', defaultBg: '#d6d3d1', defaultIcon: 'fa-solid fa-gear' }
+            ];
+
+            let html = '';
+            apps.forEach(app => {
+                const data = iconCustomData[app.key] || {};
+                const bgColor = data.bg || app.defaultBg;
+                const iconClass = data.icon || app.defaultIcon;
+                const iconColor = data.color || '#ffffff';
+
+                html += `
+                        <div class="flex items-center gap-3 p-2 bg-stone-50 rounded-xl border border-stone-200/60" data-app="${app.key}">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm flex-shrink-0" style="background:${bgColor};color:${iconColor}">
+                                <i class="${iconClass}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="font-medium text-stone-700 text-xs">${app.name}</span>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    <input type="text" placeholder="背景色 (如 #06C755)" value="${bgColor}" class="w-20 bg-white border border-stone-200 rounded-lg p-1 text-[10px] focus:outline-none focus:ring-1 focus:ring-rose-400 icon-bg" data-app="${app.key}">
+                                    <input type="text" placeholder="图标 (如 fa-heart)" value="${iconClass}" class="w-24 bg-white border border-stone-200 rounded-lg p-1 text-[10px] focus:outline-none focus:ring-1 focus:ring-rose-400 icon-class" data-app="${app.key}">
+                                    <input type="text" placeholder="颜色 (如 #fff)" value="${iconColor}" class="w-16 bg-white border border-stone-200 rounded-lg p-1 text-[10px] focus:outline-none focus:ring-1 focus:ring-rose-400 icon-color" data-app="${app.key}">
+                                    <button onclick="applyIconChange('${app.key}')" class="bg-sky-500 text-white px-2 py-0.5 rounded-lg text-[10px] active:scale-95 transition-transform">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function applyIconChange(appKey) {
+            const container = document.getElementById('icon-settings-container');
+            const row = container.querySelector(`[data-app="${appKey}"]`);
+            if (!row) return;
+
+            const bg = row.querySelector('.icon-bg').value.trim();
+            const icon = row.querySelector('.icon-class').value.trim();
+            const color = row.querySelector('.icon-color').value.trim();
+
+            if (!bg || !icon) {
+                alert('请至少填写背景色和图标类名');
+                return;
+            }
+
+            if (!iconCustomData[appKey]) iconCustomData[appKey] = {};
+            iconCustomData[appKey].bg = bg;
+            iconCustomData[appKey].icon = icon;
+            iconCustomData[appKey].color = color || '#ffffff';
+
+            localStorage.setItem('icon_custom_data', JSON.stringify(iconCustomData));
+            applyIconCustomizations();
+            renderIconSettings();
+        }
+
+        function applyIconCustomizations() {
+            // 应用图标
+            const appMap = {
+                line: 'icon-line',
+                ins: 'icon-ins',
+                contacts: 'icon-contacts',
+                settings: 'icon-settings'
+            };
+
+            Object.keys(appMap).forEach(key => {
+                const el = document.getElementById(appMap[key]);
+                if (!el) return;
+                const data = iconCustomData[key];
+                if (data) {
+                    el.style.background = data.bg || '';
+                    el.style.color = data.color || '#ffffff';
+                    // 更新图标
+                    const iconEl = el.querySelector('i');
+                    if (iconEl && data.icon) {
+                        iconEl.className = data.icon;
+                    }
+                } else {
+                    // 恢复默认
+                    const defaults = DEFAULT_ICON_CONFIG[key];
+                    if (defaults) {
+                        el.style.background = defaults.bg || '';
+                        el.style.color = defaults.color || '#ffffff';
+                        const iconEl = el.querySelector('i');
+                        if (iconEl) {
+                            iconEl.className = defaults.icon || '';
+                        }
+                    }
+                }
+            });
+        }
+
+        function resetIconToDefault(appKey) {
+            delete iconCustomData[appKey];
+            localStorage.setItem('icon_custom_data', JSON.stringify(iconCustomData));
+            applyIconCustomizations();
+            renderIconSettings();
+        }
+
+        // ========== 自定义 CSS 功能 ==========
+        function saveCustomCSS() {
+            const css = document.getElementById('custom-css-input').value;
+            const styleEl = document.getElementById('custom-css-placeholder');
+            if (styleEl) {
+                styleEl.textContent = css;
+                localStorage.setItem('custom_css', css);
+                alert('✅ CSS 已应用！');
+            }
+        }
+
+        function resetCustomCSS() {
+            document.getElementById('custom-css-input').value = '';
+            const styleEl = document.getElementById('custom-css-placeholder');
+            if (styleEl) {
+                styleEl.textContent = '';
+                localStorage.removeItem('custom_css');
+                alert('✅ CSS 已重置');
+            }
+        }
+
+        function loadCustomCSS() {
+            const saved = localStorage.getItem('custom_css');
+            if (saved) {
+                document.getElementById('custom-css-input').value = saved;
+                const styleEl = document.getElementById('custom-css-placeholder');
+                if (styleEl) {
+                    styleEl.textContent = saved;
+                }
+            }
+        }
+
+        // ========== 数据保存加载 ==========
+        function loadSavedData() {
+            const savedContacts = localStorage.getItem('contacts_list');
+            if (savedContacts) try { createdCharactersList = JSON.parse(savedContacts); } catch (e) {}
+
+            const savedFriends = localStorage.getItem('line_friends');
+            if (savedFriends) try { addedLineFriends = JSON.parse(savedFriends); } catch (e) {}
+
+            const savedChats = localStorage.getItem('chat_histories');
+            if (savedChats) try { chatHistories = JSON.parse(savedChats); } catch (e) {}
+
+            const savedUser = localStorage.getItem('line_user_data');
+            if (savedUser) try { userData = { ...userData, ...JSON.parse(savedUser) }; } catch (e) {}
+
+            const savedApiUrl = localStorage.getItem('api_url');
+            const savedApiKey = localStorage.getItem('api_key');
+            const savedApiModel = localStorage.getItem('api_model');
+
+            if (document.getElementById('api-url')) document.getElementById('api-url').value = savedApiUrl || '';
+            if (document.getElementById('api-key')) document.getElementById('api-key').value = savedApiKey || '';
+            if (savedApiModel && document.getElementById('api-model-select')) {
+                const selectEl = document.getElementById('api-model-select');
+                selectEl.innerHTML = `<option value="${savedApiModel}">${savedApiModel}</option>`;
+                selectEl.value = savedApiModel;
+            }
+
+            loadWidgetData();
+            loadWallpaper();
+            loadIconSettings();
+            loadCustomCSS();
+            updateUserUI();
+            renderContactsList();
+            renderLineFriendsAndChats();
+        }
+
         function saveAllData() {
             localStorage.setItem('contacts_list', JSON.stringify(createdCharactersList));
             localStorage.setItem('line_friends', JSON.stringify(addedLineFriends));
             localStorage.setItem('chat_histories', JSON.stringify(chatHistories));
             localStorage.setItem('line_user_data', JSON.stringify(userData));
+            localStorage.setItem('ins_posts_cache', JSON.stringify(insPosts));
+        }
+
+        function saveApiConfig() {
+            const url = document.getElementById('api-url').value.trim();
+            const key = document.getElementById('api-key').value.trim();
+            const model = document.getElementById('api-model-select').value;
+
+            localStorage.setItem('api_url', url);
+            localStorage.setItem('api_key', key);
+            if (model) localStorage.setItem('api_model', model);
+
+            alert("✅ API 配置保存成功！");
         }
 
         // ========== 工具函数 ==========
@@ -708,22 +1456,166 @@
             return div.innerHTML;
         }
 
-        // ========== User Profile 相关 ==========
-        function loadUserData() {
-            const saved = localStorage.getItem('line_user_data');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    userData = { ...userData, ...parsed };
-                } catch (e) {}
+        function normalizeApiUrl(url) {
+            if (!url) return '';
+            let baseUrl = url.replace(/\/+$/, '');
+            if (!baseUrl.endsWith('/v1') && !baseUrl.includes('/chat/completions')) {
+                baseUrl += '/v1';
             }
-            updateUserUI();
+            return baseUrl;
         }
 
+        function safeJsonParse(text) {
+            try {
+                let cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+                return JSON.parse(cleaned);
+            } catch (e) {
+                console.error('JSON 解析失败:', e, '原始内容:', text);
+                return null;
+            }
+        }
+
+        async function callAIAPI(promptText) {
+            const apiUrl = localStorage.getItem('api_url');
+            const apiKey = localStorage.getItem('api_key');
+            const apiModel = localStorage.getItem('api_model');
+
+            if (!apiUrl || !apiKey || !apiModel) {
+                throw new Error('请先在设置中配置 API');
+            }
+
+            const baseUrl = normalizeApiUrl(apiUrl);
+            const response = await fetch(`${baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: apiModel,
+                    messages: [{ role: 'user', content: promptText }],
+                    temperature: 0.85,
+                    max_tokens: 800
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API 请求失败 (${response.status}): ${errorText}`);
+            }
+
+            const data = await response.json();
+            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                throw new Error('API 返回格式异常');
+            }
+
+            return data.choices[0].message.content.trim();
+        }
+
+        // ========== Widget ==========
+        function editSingleWidget(key, name, defaultValue) {
+            const current = localStorage.getItem(`widget_${key}`) || defaultValue;
+            const input = prompt(`修改${name}：`, current);
+
+            if (input !== null && input.trim() !== '') {
+                const val = input.trim();
+                localStorage.setItem(`widget_${key}`, val);
+                const el = document.getElementById(`widget-${key}`);
+                if (el) el.textContent = val;
+            }
+        }
+
+        function loadWidgetData() {
+            document.getElementById('widget-title').textContent = localStorage.getItem('widget_title') || '猫しか勝たん！！';
+            document.getElementById('widget-subtitle').textContent = localStorage.getItem('widget_subtitle') || '喵喵喵喵喵~';
+            document.getElementById('widget-weather').textContent = localStorage.getItem('widget_weather') || '晴朗 ☀️';
+            document.getElementById('widget-temp').textContent = localStorage.getItem('widget_temp') || '25°C';
+        }
+
+        // ========== Ins 逻辑 ==========
+        function initInsApp() {
+            const savedPosts = localStorage.getItem('ins_posts_cache');
+            if (savedPosts) {
+                try { insPosts = JSON.parse(savedPosts); } catch (e) {}
+            }
+            renderInsPosts();
+        }
+
+        function renderInsPosts() {
+            const feedContainer = document.getElementById('ins-feed-container');
+            if (!feedContainer) return;
+
+            let html = '';
+            insPosts.forEach(post => {
+                html += `
+                        <div class="bg-white dark:bg-gray-900 mb-4 border-b border-gray-100 dark:border-gray-800 ins-post-card">
+                            <div class="flex items-center justify-between px-4 py-3">
+                                <div class="flex items-center space-x-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
+                                        <div class="w-full h-full bg-white dark:bg-gray-900 rounded-full flex items-center justify-center text-sm">
+                                            ${post.avatar || '👤'}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-1">
+                                            <span class="text-xs font-bold text-gray-900 dark:text-gray-100">${escapeHtml(post.username)}</span>
+                                            ${post.isFriend ? '<span class="text-[9px] bg-pink-100 text-pink-600 dark:bg-pink-950 dark:text-pink-300 px-1.5 py-0.5 rounded-full font-bold">好友</span>' : ''}
+                                        </div>
+                                        <p class="text-[10px] text-gray-400">${post.timeAgo || '刚刚'}</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600 text-sm">•••</button>
+                            </div>
+
+                            <div class="w-full min-h-[220px] bg-slate-50 dark:bg-gray-800/50 border-y border-gray-100 dark:border-gray-800/80 p-5 flex flex-col justify-between relative overflow-hidden group">
+                                <div class="flex items-center justify-between text-pink-500 opacity-80 mb-2">
+                                    <div class="flex items-center space-x-1">
+                                        <span class="text-xs">📸</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider">画面细节描摹</span>
+                                    </div>
+                                </div>
+
+                                <p class="text-xs text-gray-700 dark:text-gray-200 leading-relaxed italic font-normal my-auto py-2">
+                                    "${escapeHtml(post.imageDescription)}"
+                                </p>
+
+                                <div class="text-[9px] text-gray-400 text-right mt-2">
+                                    📷 Scene Description
+                                </div>
+                            </div>
+
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2 text-xl text-gray-700 dark:text-gray-200">
+                                    <div class="flex items-center space-x-4">
+                                        <button class="hover:text-red-500 transition-colors active:scale-125">❤️</button>
+                                        <button class="hover:text-blue-500 transition-colors active:scale-125">💬</button>
+                                        <button class="hover:text-green-500 transition-colors active:scale-125">✈️</button>
+                                    </div>
+                                    <button class="hover:text-yellow-500 transition-colors">🔖</button>
+                                </div>
+
+                                <p class="text-xs font-bold mb-1 text-gray-900 dark:text-gray-100">${post.likes || 0} 次赞</p>
+
+                                <div class="text-xs text-gray-800 dark:text-gray-200 leading-normal">
+                                    <span class="font-bold mr-1.5">${escapeHtml(post.username)}</span>
+                                    <span>${escapeHtml(post.caption)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+            });
+
+            feedContainer.innerHTML = html;
+        }
+
+        // ========== User Profile ==========
         function updateUserUI() {
-            document.getElementById('line-username-display').textContent = userData.name || '我';
-            document.getElementById('line-user-status').textContent = userData.status || '输入状态消息';
-            document.getElementById('line-user-avatar').src = userData.avatar || DEFAULT_USER_AVATAR;
+            if (document.getElementById('line-username-display')) document.getElementById('line-username-display').textContent =
+                userData.name || '我';
+            if (document.getElementById('line-user-status')) document.getElementById('line-user-status').textContent = userData
+                .status || '输入状态消息';
+            if (document.getElementById('line-user-avatar')) document.getElementById('line-user-avatar').src = userData
+                .avatar || DEFAULT_USER_AVATAR;
         }
 
         function openUserProfileModal() {
@@ -777,7 +1669,7 @@
             }
         }
 
-        // ========== 通讯录相关 ==========
+        // ========== 通讯录 ==========
         function resetCreateCharacterForm() {
             editingCharacterId = null;
             document.getElementById('modal-character-title').innerText = "新建联系人";
@@ -865,7 +1757,7 @@
         function manualSaveCharacter() {
             const name = document.getElementById('input-name').value.trim();
             const alias = document.getElementById('input-alias').value.trim();
-            const line_id = document.getElementById('input-line-id').value.trim();
+            let line_id = document.getElementById('input-line-id').value.trim();
             const phone = document.getElementById('input-phone').value.trim();
             const persona = document.getElementById('persona-input').value.trim();
 
@@ -874,14 +1766,9 @@
                 return;
             }
 
-            if (line_id) {
-                const exists = createdCharactersList.find(
-                    c => c.line_id === line_id && c.id !== editingCharacterId
-                );
-                if (exists) {
-                    alert("这个 LINE ID 已经存在！请使用其他 ID。");
-                    return;
-                }
+            if (!line_id) {
+                line_id = 'line_' + Math.random().toString(36).substr(2, 8);
+                document.getElementById('input-line-id').value = line_id;
             }
 
             if (editingCharacterId) {
@@ -904,11 +1791,11 @@
             } else {
                 const newChar = {
                     id: 'char_' + Date.now(),
-                    name: name,
-                    alias: alias,
-                    line_id: line_id,
-                    phone: phone,
-                    persona: persona,
+                    name,
+                    alias,
+                    line_id,
+                    phone,
+                    persona,
                     avatar: currentAvatarData
                 };
                 createdCharactersList.push(newChar);
@@ -922,10 +1809,12 @@
 
         function renderContactsList() {
             const listContainer = document.getElementById('contacts-list');
+            if (!listContainer) return;
             listContainer.innerHTML = '';
 
             if (createdCharactersList.length === 0) {
-                listContainer.innerHTML = '<div class="text-center text-stone-400 text-xs py-12">暂无联系人<br>点击右上角 + 添加</div>';
+                listContainer.innerHTML =
+                    '<div class="text-center text-stone-400 text-xs py-12">暂无联系人<br>点击右上角 + 添加</div>';
                 return;
             }
 
@@ -949,9 +1838,7 @@
 
                 const personaSpan = document.createElement('div');
                 personaSpan.className = 'text-[10px] text-stone-500 truncate mt-1';
-                if (char.persona) {
-                    personaSpan.textContent = '人设: ' + char.persona;
-                }
+                if (char.persona) personaSpan.textContent = '人设: ' + char.persona;
 
                 const infoDiv = document.createElement('div');
                 infoDiv.className = 'flex-1 overflow-hidden';
@@ -960,7 +1847,8 @@
                 infoDiv.appendChild(personaSpan);
 
                 const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'text-rose-400 hover:text-rose-600 text-sm p-1 flex-shrink-0 active:scale-95 transition-transform';
+                deleteBtn.className =
+                    'text-rose-400 hover:text-rose-600 text-sm p-1 flex-shrink-0 active:scale-95 transition-transform';
                 deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
                 deleteBtn.onclick = (e) => {
                     e.stopPropagation();
@@ -979,10 +1867,12 @@
             });
         }
 
-        // ========== LINE 相关 ==========
+        // ========== LINE 逻辑 ==========
         function renderLineFriendsAndChats() {
             const friendsContainer = document.getElementById('line-friends-list');
             const chatsContainer = document.getElementById('line-chat-threads-list');
+
+            if (!friendsContainer || !chatsContainer) return;
 
             if (addedLineFriends.length === 0) {
                 friendsContainer.innerHTML = `<div class="text-xs text-stone-400 py-2">暂无好友</div>`;
@@ -1004,7 +1894,6 @@
                 const img = document.createElement('img');
                 img.src = friend.avatar;
                 img.className = 'w-10 h-10 rounded-full object-cover border border-stone-100';
-                img.alt = displayName;
 
                 const nameSpan = document.createElement('span');
                 nameSpan.className = 'text-xs font-bold text-stone-800';
@@ -1022,7 +1911,6 @@
                 const chatImg = document.createElement('img');
                 chatImg.src = friend.avatar;
                 chatImg.className = 'w-12 h-12 rounded-full object-cover border border-stone-100';
-                chatImg.alt = displayName;
 
                 const chatTextDiv = document.createElement('div');
                 chatTextDiv.className = 'flex-1 overflow-hidden';
@@ -1043,7 +1931,8 @@
                 const history = chatHistories[friend.id] || [];
                 if (history.length > 0) {
                     const lastMsg = history[history.length - 1];
-                    previewP.textContent = lastMsg.sender === 'user' ? `我: ${lastMsg.text}` : `${displayName}: ${lastMsg.text}`;
+                    previewP.textContent = lastMsg.sender === 'user' ? `我: ${lastMsg.text}` :
+                        `${displayName}: ${lastMsg.text}`;
                 } else {
                     previewP.textContent = `点击开始与 ${displayName} 对话...`;
                 }
@@ -1077,11 +1966,7 @@
             if (foundChar) {
                 if (!addedLineFriends.some(f => f.id === foundChar.id)) {
                     addedLineFriends.push(foundChar);
-
-                    if (!chatHistories[foundChar.id]) {
-                        chatHistories[foundChar.id] = [];
-                    }
-
+                    if (!chatHistories[foundChar.id]) chatHistories[foundChar.id] = [];
                     saveAllData();
                     renderLineFriendsAndChats();
                 }
@@ -1099,7 +1984,6 @@
             }
         }
 
-        // ========== LINE Tab 切换 ==========
         function switchLineTab(tabName) {
             document.getElementById('line-tab-view-home').classList.add('hidden');
             document.getElementById('line-tab-view-chats').classList.add('hidden');
@@ -1127,7 +2011,6 @@
             }
         }
 
-        // ========== LINE Modal 控制 ==========
         function openLineAddModal() {
             const modal = document.getElementById('modal-line-add-friends');
             const sheet = document.getElementById('modal-sheet-content');
@@ -1144,9 +2027,7 @@
             modal.classList.add('opacity-100');
             sheet.classList.remove('slide-down');
             sheet.classList.add('slide-up');
-            setTimeout(() => {
-                document.getElementById('line-search-input').focus();
-            }, 300);
+            setTimeout(() => { document.getElementById('line-search-input').focus(); }, 300);
         }
 
         function backToAddFriendsModal() {
@@ -1179,22 +2060,25 @@
             const searchInput = document.getElementById('line-search-input');
 
             if (type === 'id') {
-                idOuter.className = "w-4 h-4 rounded-full border-2 border-[#06C755] flex items-center justify-center p-0.5";
+                idOuter.className =
+                    "w-4 h-4 rounded-full border-2 border-[#06C755] flex items-center justify-center p-0.5";
                 idInner.className = "w-full h-full rounded-full bg-[#06C755]";
-                phoneOuter.className = "w-4 h-4 rounded-full border border-stone-300 flex items-center justify-center p-0.5";
+                phoneOuter.className =
+                    "w-4 h-4 rounded-full border border-stone-300 flex items-center justify-center p-0.5";
                 phoneInner.className = "w-full h-full rounded-full bg-transparent";
                 searchInput.placeholder = "输入好友的 ID";
             } else {
-                phoneOuter.className = "w-4 h-4 rounded-full border-2 border-[#06C755] flex items-center justify-center p-0.5";
+                phoneOuter.className =
+                    "w-4 h-4 rounded-full border-2 border-[#06C755] flex items-center justify-center p-0.5";
                 phoneInner.className = "w-full h-full rounded-full bg-[#06C755]";
-                idOuter.className = "w-4 h-4 rounded-full border border-stone-300 flex items-center justify-center p-0.5";
+                idOuter.className =
+                    "w-4 h-4 rounded-full border border-stone-300 flex items-center justify-center p-0.5";
                 idInner.className = "w-full h-full rounded-full bg-transparent";
                 searchInput.placeholder = "输入好友的电话号码";
             }
         }
 
-        // ========== 聊天核心功能 ==========
-
+        // ========== 聊天详情 ==========
         function openChatDetail(friend) {
             closeAllLineModals();
             currentChatFriend = friend;
@@ -1264,7 +2148,6 @@
             if (typing) typing.remove();
         }
 
-        // ========== ⭐ 修改后的 sendChatMessage（分句延迟渲染） ==========
         async function sendChatMessage() {
             if (isWaitingForAIResponse) return;
 
@@ -1287,9 +2170,7 @@
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
-            if (!chatHistories[currentChatFriend.id]) {
-                chatHistories[currentChatFriend.id] = [];
-            }
+            if (!chatHistories[currentChatFriend.id]) chatHistories[currentChatFriend.id] = [];
             chatHistories[currentChatFriend.id].push({ sender: 'user', text: text });
 
             saveAllData();
@@ -1303,30 +2184,24 @@
                 const rawReply = await getAIResponse(currentChatFriend, text);
                 removeTypingIndicator();
 
-                // ⭐ 1. 将 AI 返回的内容按照 || 进行切割
                 const messageSegments = rawReply.split('||').map(s => s.trim()).filter(Boolean);
 
-                // ⭐ 2. 依次模拟打字并分条发送
                 for (let i = 0; i < messageSegments.length; i++) {
                     const segment = messageSegments[i];
 
-                    // 如果不是第一条，模拟短暂停顿（打字感）
                     if (i > 0) {
                         addTypingIndicator();
-                        // 根据字数动态算延迟，最少 0.6 秒，最多 2 秒
                         const delay = Math.max(600, Math.min(2000, segment.length * 70));
                         await new Promise(resolve => setTimeout(resolve, delay));
                         removeTypingIndicator();
                     }
 
-                    // 渲染气泡
                     const aiBubble = document.createElement('div');
                     aiBubble.className = 'message-bubble-received';
                     aiBubble.textContent = segment;
                     container.appendChild(aiBubble);
                     container.scrollTop = container.scrollHeight;
 
-                    // 保存进历史记录
                     chatHistories[currentChatFriend.id].push({ sender: 'ai', text: segment });
                 }
 
@@ -1348,61 +2223,51 @@
             }
         }
 
-        // ========== ⭐ 修改后的 getAIResponse（新的 systemPrompt + 参数） ==========
         async function getAIResponse(friend, userMessage) {
             const apiUrl = localStorage.getItem('api_url');
             const apiKey = localStorage.getItem('api_key');
             const apiModel = localStorage.getItem('api_model');
 
-            if (!apiUrl || !apiKey) {
-                throw new Error('请先在设置中配置 API');
-            }
-            if (!apiModel) {
-                throw new Error('请先在设置中拉取并选择模型');
-            }
+            if (!apiUrl || !apiKey) throw new Error('请先在设置中配置 API');
+            if (!apiModel) throw new Error('请先在设置中拉取并选择模型');
 
             const userPersona = userData.persona || '未设定';
             const friendPersona = friend.persona || '未设定';
-
             const history = chatHistories[friend.id] || [];
             const messages = [];
 
-            // ⭐ 新的 systemPrompt
-            const systemPrompt = `你是一个活生生的人，正在用微信/LINE与朋友聊天。
+            const systemPrompt = `你是一个活生生的人，正在用 LINE 与朋友聊天。
 
-【你的身份/人设】
-${friendPersona}
+        【你的身份/人设】
+        ${friendPersona}
 
-【对方（用户）的身份/人设】
-${userPersona}
+        【对方（用户）的身份/人设】
+        ${userPersona}
 
-【聊天行为准则（必须严格遵守）】
-1. **真实断句与发消息风格**：
-   - 说话要像日常打字一样，善用自然断句。
-   - 遇到较长的表达，使用符号 \`||\` 来分隔多句话（例如："在干嘛呢||我刚吃完饭"）。
-   - 适当加入口语助词（如：哈、欸、嗯、笑死、好吧、真的假的）。
-2. **人设还原度**：
-   - 严格按照你的人设性格、用词习惯、语气口癖来回复。
-   - 不要表现得像AI（严禁出现"作为AI"、"我可以为你提供帮助"等机械词汇）。
-3. **情绪与动作（心理描写/动作）**：
-   - 括号内可带微小动作或情绪动作，如：*(挑眉)*、*(小声哼哼)*、*(探头)*，但不要泛滥。
-4. **长短控制**：
-   - 回复要精炼、口语化，不要一次性输出几百字的大长篇。`;
+        【聊天行为准则（必须严格遵守）】
+        1. **真实断句与发消息风格**：
+           - 说话要像日常打字一样，善用自然断句。
+           - 遇到较长的表达，使用符号 \`||\` 来分隔多句话。
+           - 适当加入口语助词（如：哈、欸、嗯、笑死、好吧）。
+        2. **人设还原度**：
+           - 严格按照你的人设性格和语气口癖来回复。
+           - 严禁出现"作为AI"、"我可以为你提供帮助"等机械词汇。
+        3. **长短控制**：
+           - 回复精炼口语化，避免输出长篇大论。`;
 
             messages.push({ role: 'system', content: systemPrompt });
 
             const recentHistory = history.slice(-10);
             for (const msg of recentHistory) {
-                if (msg.sender === 'user') {
-                    messages.push({ role: 'user', content: msg.text });
-                } else if (msg.sender === 'ai') {
-                    messages.push({ role: 'assistant', content: msg.text });
-                }
+                messages.push({
+                    role: msg.sender === 'user' ? 'user' : 'assistant',
+                    content: msg.text
+                });
             }
 
             messages.push({ role: 'user', content: userMessage });
 
-            const baseUrl = apiUrl.replace(/\/+$/, '');
+            const baseUrl = normalizeApiUrl(apiUrl);
             const response = await fetch(`${baseUrl}/chat/completions`, {
                 method: 'POST',
                 headers: {
@@ -1412,9 +2277,7 @@ ${userPersona}
                 body: JSON.stringify({
                     model: apiModel,
                     messages: messages,
-                    temperature: 0.85,      // 适当提高温度，使表达更有灵性
-                    presence_penalty: 0.6,   // 增加存在惩罚，避免重复口头禅
-                    frequency_penalty: 0.3,
+                    temperature: 0.85,
                     max_tokens: 300
                 })
             });
@@ -1425,14 +2288,9 @@ ${userPersona}
             }
 
             const data = await response.json();
-            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-                throw new Error('API 返回格式异常');
-            }
-
             return data.choices[0].message.content.trim();
         }
 
-        // ========== AI 生成人设（通讯录用） ==========
         async function generateCharacter() {
             const persona = document.getElementById('persona-input').value.trim();
             if (!persona) return alert("请先在文本框中输入角色性格或设定！");
@@ -1441,15 +2299,8 @@ ${userPersona}
             const apiKey = localStorage.getItem('api_key');
             const apiModel = localStorage.getItem('api_model');
 
-            if (!apiUrl || !apiKey) {
-                alert("请先在「设置」App 中配置 API URL 和 API Key！");
-                closeCreateCharacterModal();
-                openApp('settings');
-                return;
-            }
-
-            if (!apiModel) {
-                alert("请先在「设置」App 中拉取并选择模型！");
+            if (!apiUrl || !apiKey || !apiModel) {
+                alert("请先在「设置」App 中配置并设置 API！");
                 closeCreateCharacterModal();
                 openApp('settings');
                 return;
@@ -1460,7 +2311,7 @@ ${userPersona}
             btn.disabled = true;
 
             try {
-                const baseUrl = apiUrl.replace(/\/+$/, '');
+                const baseUrl = normalizeApiUrl(apiUrl);
                 const response = await fetch(`${baseUrl}/chat/completions`, {
                     method: 'POST',
                     headers: {
@@ -1469,42 +2320,35 @@ ${userPersona}
                     },
                     body: JSON.stringify({
                         model: apiModel,
-                        response_format: { type: "json_object" },
                         messages: [
-                            { role: "system", content: "你是一个角色生成器。根据用户设定生成 JSON 对象，包含：name(名字), alias(备注名), line_id(8位随机英文+数字), phone(11位随机数字), persona(精简版人设描述，50字内)。" },
+                            { role: "system",
+                                content: "你是一个角色生成器。根据用户设定生成 JSON 对象，包含：name(名字), alias(备注名), line_id(8位随机英文+数字), phone(11位随机数字), persona(精简版人设描述，50字内)。返回 JSON 格式。" },
                             { role: "user", content: persona }
-                        ]
+                        ],
+                        max_tokens: 300
                     })
                 });
 
                 const data = await response.json();
-                const content = data.choices[0].message.content;
+                const result = safeJsonParse(data.choices[0].message.content);
 
-                let jsonText = content
-                    .replace(/```json\s*/g, '')
-                    .replace(/```\s*/g, '')
-                    .trim();
-
-                const result = JSON.parse(jsonText);
-
-                document.getElementById('input-name').value = result.name || '';
-                document.getElementById('input-alias').value = result.alias || '';
-                document.getElementById('input-line-id').value = result.line_id || '';
-                document.getElementById('input-phone').value = result.phone || '';
-                document.getElementById('persona-input').value = result.persona || persona;
-
-                alert("✨ 已自动为您填充 AI 生成的角色属性，请点击右上角「保存」！");
-
+                if (result) {
+                    document.getElementById('input-name').value = result.name || '';
+                    document.getElementById('input-alias').value = result.alias || '';
+                    document.getElementById('input-line-id').value = result.line_id || '';
+                    document.getElementById('input-phone').value = result.phone || '';
+                    document.getElementById('persona-input').value = result.persona || persona;
+                    alert("✨ 已自动填充 AI 生成的角色属性！");
+                }
             } catch (error) {
                 console.error(error);
-                alert("❌ API 请求失败，请检查设置或网络。");
+                alert("❌ API 请求失败，请检查设置。");
             } finally {
                 btn.innerText = "通过 API 生成";
                 btn.disabled = false;
             }
         }
 
-        // ========== 拉取模型列表 ==========
         async function fetchModels() {
             const apiUrl = document.getElementById('api-url').value.trim();
             const apiKey = document.getElementById('api-key').value.trim();
@@ -1521,41 +2365,22 @@ ${userPersona}
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> 加载中...';
             statusEl.textContent = '正在拉取模型列表...';
-            statusEl.className = 'text-[10px] text-sky-500 mt-1.5';
 
             try {
-                const baseUrl = apiUrl.replace(/\/+$/, '');
+                const baseUrl = normalizeApiUrl(apiUrl);
                 const response = await fetch(`${baseUrl}/models`, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${apiKey}`
-                    }
+                    headers: { 'Authorization': `Bearer ${apiKey}` }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
 
                 let models = [];
                 if (data.data && Array.isArray(data.data)) {
                     models = data.data.map(m => typeof m === 'string' ? m : (m.id || m));
-                } else if (data.models && Array.isArray(data.models)) {
-                    models = data.models.map(m => typeof m === 'string' ? m : (m.id || m));
-                } else if (Array.isArray(data)) {
-                    models = data.map(m => typeof m === 'string' ? m : (m.id || m));
                 }
 
-                models = models.filter(m => m && typeof m === 'string');
-
-                if (models.length === 0) {
-                    statusEl.textContent = '⚠️ 未获取到任何模型，请检查 API 是否兼容 OpenAI 格式';
-                    statusEl.className = 'text-[10px] text-amber-500 mt-1.5';
-                    return;
-                }
-
-                const currentValue = selectEl.value;
                 selectEl.innerHTML = '<option value="">-- 请选择模型 --</option>';
                 models.forEach(model => {
                     const opt = document.createElement('option');
@@ -1564,140 +2389,129 @@ ${userPersona}
                     selectEl.appendChild(opt);
                 });
 
-                if (currentValue && models.includes(currentValue)) {
-                    selectEl.value = currentValue;
-                } else if (models.length > 0) {
-                    selectEl.value = models[0];
-                }
-
-                availableModels = models;
+                if (models.length > 0) selectEl.value = models[0];
                 statusEl.textContent = `✅ 成功拉取 ${models.length} 个模型`;
-                statusEl.className = 'text-[10px] text-emerald-500 mt-1.5';
-
                 localStorage.setItem('api_model', selectEl.value);
 
             } catch (error) {
-                console.error('拉取模型失败:', error);
                 statusEl.textContent = `❌ 拉取失败: ${error.message}`;
-                statusEl.className = 'text-[10px] text-rose-500 mt-1.5';
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-rotate mr-1"></i> 拉取';
             }
         }
 
-        // ========== App 切换 ==========
+        // ========== 页面切换 ==========
         function openApp(appName) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
             closeAllLineModals();
             closeChatDetail();
-            document.querySelectorAll('.app-view').forEach(app => {
-                app.classList.remove('active-app');
-                app.classList.add('hidden-app');
-            });
+
+            const allApps = document.querySelectorAll('.app-view');
+            const homeApp = document.getElementById('app-home');
             const targetApp = document.getElementById(`app-${appName}`);
+
+            if (targetApp && targetApp.classList.contains('active-app')) {
+                isTransitioning = false;
+                return;
+            }
+
+            allApps.forEach(app => {
+                app.classList.remove('active-app');
+                if (app.id !== 'app-home') {
+                    app.style.display = 'none';
+                }
+            });
+
+            if (homeApp) {
+                homeApp.classList.add('hidden-app');
+            }
+
+            void document.body.offsetHeight;
+
             if (targetApp) {
-                targetApp.classList.remove('hidden-app');
-                targetApp.classList.add('active-app');
+                targetApp.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    targetApp.classList.add('active-app');
+                    setTimeout(() => {
+                        isTransitioning = false;
+                    }, 300);
+                });
+            } else {
+                isTransitioning = false;
+            }
+
+            if (appName === 'ins') {
+                setTimeout(initInsApp, 200);
             }
         }
 
         function goHome() {
+            if (isTransitioning) return;
+
             if (currentChatFriend) {
                 closeChatDetail();
+                setTimeout(() => {
+                    goHome();
+                }, 200);
                 return;
             }
+
+            isTransitioning = true;
 
             closeAllLineModals();
             closeCreateCharacterModal();
             closeUserProfileModal();
-            document.querySelectorAll('.app-view').forEach(app => {
+
+            const allApps = document.querySelectorAll('.app-view');
+            const homeApp = document.getElementById('app-home');
+
+            allApps.forEach(app => {
                 app.classList.remove('active-app');
-                app.classList.add('hidden-app');
+                if (app.id !== 'app-home') {
+                    app.style.display = 'none';
+                }
             });
-        }
 
-        // ========== 设置保存 ==========
-        function saveApiConfig() {
-            const url = document.getElementById('api-url').value.trim();
-            const key = document.getElementById('api-key').value.trim();
-            const model = document.getElementById('api-model-select').value.trim();
-
-            if (!url) {
-                alert("请填写 Base URL");
-                return;
+            if (homeApp) {
+                homeApp.classList.remove('hidden-app');
+                homeApp.style.display = 'flex';
+                void document.body.offsetHeight;
+                requestAnimationFrame(() => {
+                    homeApp.style.opacity = '1';
+                    homeApp.style.pointerEvents = 'auto';
+                    setTimeout(() => {
+                        isTransitioning = false;
+                    }, 200);
+                });
+            } else {
+                isTransitioning = false;
             }
-            if (!key) {
-                alert("请填写 API Key");
-                return;
-            }
-
-            localStorage.setItem('api_url', url);
-            localStorage.setItem('api_key', key);
-            localStorage.setItem('api_model', model);
-
-            alert("✅ 设置已成功保存！");
         }
 
         // ========== 初始化 ==========
-        document.addEventListener("DOMContentLoaded", () => {
-            loadUserData();
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
 
-            const savedUrl = localStorage.getItem('api_url') || '';
-            const savedKey = localStorage.getItem('api_key') || '';
-            const savedModel = localStorage.getItem('api_model') || '';
-
-            document.getElementById('api-url').value = savedUrl;
-            document.getElementById('api-key').value = savedKey;
-
-            const selectEl = document.getElementById('api-model-select');
-            if (savedModel) {
-                const opt = document.createElement('option');
-                opt.value = savedModel;
-                opt.textContent = savedModel + ' ✅';
-                selectEl.appendChild(opt);
-                selectEl.value = savedModel;
+            const homeApp = document.getElementById('app-home');
+            if (homeApp) {
+                homeApp.style.display = 'flex';
+                homeApp.style.opacity = '1';
+                homeApp.style.pointerEvents = 'auto';
+                homeApp.classList.remove('hidden-app');
             }
 
-            if (savedUrl && savedKey) {
-                setTimeout(() => {
-                    fetchModels();
-                }, 800);
-            }
-
-            const savedContacts = localStorage.getItem('contacts_list');
-            if (savedContacts) {
-                try {
-                    createdCharactersList = JSON.parse(savedContacts);
-                } catch (e) {}
-            }
-
-            const savedFriends = localStorage.getItem('line_friends');
-            if (savedFriends) {
-                try {
-                    addedLineFriends = JSON.parse(savedFriends);
-                } catch (e) {}
-            }
-
-            const savedChats = localStorage.getItem('chat_histories');
-            if (savedChats) {
-                try {
-                    chatHistories = JSON.parse(savedChats);
-                } catch (e) {}
-            }
-
-            setSearchType('id');
-            renderContactsList();
-            renderLineFriendsAndChats();
-
-            const now = new Date();
-            const days = ['日', '一', '二', '三', '四', '五', '六'];
-            const dateStr = `${now.getMonth() + 1}月${now.getDate()}日 周${days[now.getDay()]}`;
-            document.getElementById('widget-date').textContent = dateStr;
+            document.querySelectorAll('.app-view:not(#app-home)').forEach(app => {
+                app.style.display = 'none';
+                app.classList.remove('active-app');
+            });
         });
 
-        window.addEventListener('beforeunload', () => {
-            saveAllData();
-        });
+        window.addEventListener('beforeunload', () => { saveAllData(); });
+        setInterval(() => { saveAllData(); }, 5000);
     </script>
+
 </body>
 </html>
